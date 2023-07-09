@@ -265,4 +265,4 @@ Contributions are more than welcome. If you find a bug or have an idea for an en
 
 ## License
 
-The Zodiac Signs package is released under the MIT license. See [LICENSE](https://github.com/markbattistella/ZodiacKit/blob/main/LICENCE.md) for more information.
+The Zodiac Signs package is released under the MIT license. See [LICENSE](https://github.com/markbattistella/ZodiacKit/blob/main/LICENSE) for more information.
