@@ -8,6 +8,13 @@ import XCTest
 
 class ZodiacKitTests: XCTestCase {
 
+	#if canImport(UIKit)
+	public typealias Colour = UIColor
+	#elseif canImport(AppKit)
+	public typealias Colour = NSColor
+	#endif
+
+
 	// MARK: - variables
 
 	var validator: ZodiacDateValidator!
@@ -31,6 +38,85 @@ class ZodiacKitTests: XCTestCase {
 		}
 	}
 
+	/// Tests the `name` attribute of the `Sign` enum to ensure each sign's name is correctly capitalized.
+	func testSignAttributeName() {
+		let expectedNames = Sign.allCases.map { $0.rawValue.capitalized }
+		testAttribute(
+			attributeName: "Name",
+			expectedValues: expectedNames,
+			attributeClosure: { $0.name }
+		)
+	}
+
+	/// Tests the `worldlyElement` attribute of the `Sign` enum to ensure each sign's worldly element is correct.
+	func testSignAttributeWorldlyElement() {
+		let expectedElements = [
+			"Air", "Fire", "Water", "Earth",
+			"Air", "Fire", "Air", "Water",
+			"Fire", "Water", "Earth", "Earth"
+		]
+		testAttribute(
+			attributeName: "Worldly Element",
+			expectedValues: expectedElements,
+			attributeClosure: { $0.worldlyElement }
+		)
+	}
+
+	/// Tests the `emoji` attribute of the `Sign` enum to ensure each sign's emoji representation is correct.
+	func testSignAttributeEmoji() {
+		let expectedEmojis = [
+			"♒️", "♈️", "♋️", "♑️",
+			"♊️", "♌️", "♎️", "♓️",
+			"♐️", "♏️", "♉️", "♍️"
+		]
+		testAttribute(
+			attributeName: "Emoji",
+			expectedValues: expectedEmojis,
+			attributeClosure: { $0.emoji }
+		)
+	}
+
+	/// Tests the `rulingPlanetName` attribute of the `Sign` enum to ensure each sign's ruling planet name is correct.
+	func testSignAttributeRulingPlanetName() {
+		let expectedRulingPlanets = [
+			"Uranus", "Mars", "Moon", "Saturn",
+			"Mercury", "Sun", "Venus", "Neptune",
+			"Jupiter", "Pluto", "Venus", "Mercury"
+		]
+		testAttribute(
+			attributeName: "Ruling Planet Name",
+			expectedValues: expectedRulingPlanets,
+			attributeClosure: { $0.rulingPlanetName }
+		)
+	}
+
+	/// Tests the `rulingPlanet` attribute of the `Sign` enum to ensure each sign's ruling planet symbol is correct.
+	func testSignAttributeRulingPlanetSymbol() {
+		let expectedRulingPlanetSymbols = [
+			"♅", "♂", "☽", "♄",
+			"☿", "☉", "♀", "♆",
+			"♃", "♇", "♀", "☿"
+		]
+		testAttribute(
+			attributeName: "Ruling Planet",
+			expectedValues: expectedRulingPlanetSymbols,
+			attributeClosure: { $0.rulingPlanet }
+		)
+	}
+
+	/// Tests the `color` attribute of the `Sign` enum to ensure each sign's associated color is correct.
+	func testSignAttributeColor() {
+		let expectedColors: [Colour] = [
+			.systemBlue, .systemRed, .systemPurple, .black,
+			.systemYellow, .systemOrange, .systemPink, .systemGreen,
+			.systemBrown, .magenta, .gray, .systemBrown
+		]
+		testAttribute(
+			attributeName: "Color",
+			expectedValues: expectedColors,
+			attributeClosure: { $0.color }
+		)
+	}
 
 	// MARK: - default date tests
 
@@ -180,10 +266,25 @@ class ZodiacKitTests: XCTestCase {
 
 	// MARK: - helper
 
-	// -- helper method to create a Date object
+	/// Creates a `Date` object with the specified day and month in the year 2000.
+	/// - Parameters:
+	///   - day: The day value of the date.
+	///   - month: The month value of the date.
+	/// - Returns: A `Date` object representing the specified day and month in the year 2000.
 	private func createDate(day: Int, month: Int) -> Date {
 		let calendar = Calendar.current
 		let components = DateComponents(year: 2000, month: month, day: day)
 		return calendar.date(from: components)!
+	}
+
+	/// Tests a specific attribute of the `Sign` enum to ensure its values match the expected values.
+	/// - Parameters:
+	///   - attributeName: The name of the attribute being tested.
+	///   - expectedValues: An array of expected values for the attribute.
+	///   - attributeClosure: A closure that represents the attribute's getter.
+	func testAttribute<T : Equatable>(attributeName: String, expectedValues: [T], attributeClosure: (Sign) -> T) {
+		for (index, sign) in Sign.allCases.enumerated() {
+			XCTAssertEqual(attributeClosure(sign), expectedValues[index], "\(attributeName) is incorrect for \(sign.rawValue)")
+		}
 	}
 }

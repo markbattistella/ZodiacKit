@@ -20,9 +20,9 @@ public enum Sign: String, CaseIterable, Codable {
 extension Sign {
 
 	#if canImport(UIKit)
-	typealias Colour = UIColor
+	public typealias Colour = UIColor
 	#elseif canImport(AppKit)
-	typealias Colour = NSColor
+	public typealias Colour = NSColor
 	#endif
 
 	/// The capitalized name of the zodiac sign

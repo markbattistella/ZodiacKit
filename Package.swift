@@ -16,15 +16,16 @@ let package = Package(
             targets: ["ZodiacKit"]
 		)
     ],
-    dependencies: [],
     targets: [
         .target(
             name: "ZodiacKit",
-            dependencies: []
+            dependencies: [],
+			path: "Sources"
 		),
         .testTarget(
             name: "ZodiacKitTests",
-            dependencies: ["ZodiacKit"]
+            dependencies: ["ZodiacKit"],
+			path: "Tests"
 		)
     ]
 )
