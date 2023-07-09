@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "ZodiacKit",
 	platforms: [
-		.iOS(.v11),
+		.iOS(.v13),
 		.macOS(.v10_13),
 		.macCatalyst(.v13),
 		.tvOS(.v11)
