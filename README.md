@@ -1,5 +1,17 @@
 # ZodiacKit
 
+![Language](https://img.shields.io/badge/Language-Swift-white?labelColor=orange&style=flat)
+![Language](https://img.shields.io/badge/-SwiftUI-white?labelColor=gray&style=flat)
+![Language](https://img.shields.io/badge/-UIKit-white?labelColor=gray&style=flat)
+![Language](https://img.shields.io/badge/-AppKit-white?labelColor=gray&style=flat)
+
+![Platforms](https://img.shields.io/badge/Platform-iOS%2013+-white?labelColor=gray&style=flat)
+![Platforms](https://img.shields.io/badge/Platform-iPadOS%2013+-white?labelColor=gray&style=flat)
+![Platforms](https://img.shields.io/badge/Platform-macOS%2010.15+-white?labelColor=gray&style=flat)
+![Platforms](https://img.shields.io/badge/Platform-tvOS%2013+-white?labelColor=gray&style=flat)
+
+![Licence](https://img.shields.io/badge/Licence-MIT-white?labelColor=blue&style=flat)
+
 ZodiacKit is a Swift package that allows you to fetch Zodiac Sign information based on a given date. It provides a simple, efficient, and easily integrable solution for applications that deal with astrological data.
 
 ## Table of Contents
