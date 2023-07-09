@@ -1,4 +1,4 @@
-// swift-tools-version: 5.5
+// swift-tools-version: 5.8
 
 import PackageDescription
 
@@ -6,9 +6,9 @@ let package = Package(
     name: "ZodiacKit",
 	platforms: [
 		.iOS(.v13),
-		.macOS(.v10_13),
+		.macOS(.v10_15),
 		.macCatalyst(.v13),
-		.tvOS(.v11)
+		.tvOS(.v13)
 	],
     products: [
         .library(
