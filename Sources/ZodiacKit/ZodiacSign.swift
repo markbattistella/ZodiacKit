@@ -26,10 +26,10 @@ extension Sign {
 	#endif
 
 	/// The capitalized name of the zodiac sign
-	var name: String { self.rawValue.capitalized }
+	public var name: String { self.rawValue.capitalized }
 
 	/// Represents the worldly element associated with the zodiac sign.
-	var worldlyElement: String {
+	public var worldlyElement: String {
 		switch self {
 			case .aquarius, .gemini, .libra:
 				return "Air"
@@ -43,7 +43,7 @@ extension Sign {
 	}
 
 	/// Represents the emoji associated with the zodiac sign.
-	var emoji: String {
+	public var emoji: String {
 		switch self {
 			case .aquarius:
 				return "♒️"
@@ -73,7 +73,7 @@ extension Sign {
 	}
 
 	/// Represents the color associated with the zodiac sign.
-	var color: Colour {
+	public var color: Colour {
 		switch self {
 			case .aquarius:
 				return .systemBlue
@@ -103,7 +103,7 @@ extension Sign {
 	}
 
 	/// Represents the name of the ruling planet associated with the zodiac sign.
-	var rulingPlanetName: String {
+	public var rulingPlanetName: String {
 		switch self {
 			case .aquarius:
 				return "Uranus"
@@ -133,7 +133,7 @@ extension Sign {
 	}
 
 	/// Represents the symbol of the ruling planet associated with the zodiac sign.
-	var rulingPlanet: String {
+	public var rulingPlanet: String {
 		switch self {
 			case .aquarius:
 				return "♅"
