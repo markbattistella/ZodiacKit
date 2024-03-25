@@ -6,10 +6,10 @@
 import Foundation
 
 /// Represents a zodiac sign with its date range
-public struct Zodiac: Codable {
+public struct WesternZodiac: Codable {
 
 	/// The zodiac sign
-	public let sign: Sign
+	public let sign: WesternZodiacSign
 
 	/// The start date range of the zodiac sign
 	public let startDate: DateRange

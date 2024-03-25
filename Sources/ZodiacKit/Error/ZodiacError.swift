@@ -25,6 +25,9 @@ public enum ZodiacError: Error {
 
 	/// Thrown when there are missing zodiac signs in the zodiacs
 	case missingZodiac
+
+    /// Thrown when the Western date is converted to Chinese date is not in the full format
+    case incorrectDateFormat
 }
 
 
@@ -70,6 +73,12 @@ extension ZodiacError: LocalizedError {
 					"Missing zodiac signs in the zodiacs.",
 					comment: "ZodiacError - missingZodiac"
 				)
+
+            case .incorrectDateFormat:
+                return NSLocalizedString(
+                    "Date is not in the full format for proper conversion.",
+                    comment: "ZodiacError - incorrectDateFormat"
+                )
 		}
 	}
 }
