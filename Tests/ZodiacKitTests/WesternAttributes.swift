@@ -1,6 +1,7 @@
 //
-//  ZodiacKit
-//  Created by Mark Battistella
+// Project: ZodiacKit
+// Author: Mark Battistella
+// Website: https://markbattistella.com
 //
 
 import XCTest
