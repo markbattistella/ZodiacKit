@@ -7,6 +7,7 @@
 import Foundation
 
 /// A service for determining a person's Western and Chinese zodiac signs based on their birthdate.
+@ZodiacActor
 public struct ZodiacService {
 
     /// A collection of WesternZodiac objects representing the zodiac signs.
@@ -26,12 +27,12 @@ public struct ZodiacService {
     /// - Parameter zodiacs: An array of WesternZodiac objects. If not provided, 
     /// a default set is used.
     /// - Throws: An error if the provided zodiacs are invalid.
-    public init(zodiacs: [WesternZodiac] = defaultZodiacs) throws {
-        try validator.validate(zodiacs: zodiacs)
-        self.zodiacs = zodiacs
-        self.dayOfYearToZodiac = ZodiacService.mapZodiacsToDaysOfYear(zodiacs: zodiacs, 
-                                                                      validator: validator)
-    }
+        public init(zodiacs: [WesternZodiac] = defaultZodiacs) throws {
+            try validator.validate(zodiacs: zodiacs)
+            self.zodiacs = zodiacs
+            self.dayOfYearToZodiac = ZodiacService.mapZodiacsToDaysOfYear(zodiacs: zodiacs,
+                                                                          validator: validator)
+        }
 
     /// Maps zodiac periods to days of the year.
     ///
