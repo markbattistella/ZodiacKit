@@ -7,7 +7,7 @@
 import Foundation
 
 /// Represents a zodiac sign with its date range
-public struct WesternZodiac: Codable {
+public struct WesternZodiac: Codable, Sendable {
 
 	/// The zodiac sign
 	public let sign: WesternZodiacSign
@@ -19,7 +19,7 @@ public struct WesternZodiac: Codable {
 	public let endDate: DateRange
 
 	/// Represents a date with day and month only
-	public struct DateRange: Codable {
+	public struct DateRange: Codable, Sendable{
 
 		/// The day of the date range
 		public let day: Int

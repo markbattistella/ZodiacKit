@@ -23,6 +23,7 @@ class ZodiacKitTests: XCTestCase {
 
     /// Sets up necessary instances before each test is run. This includes initializing the 
     /// `validator` and `service` variables.
+    @ZodiacActor
     override func setUp() {
         super.setUp()
         self.validator = DateValidator()

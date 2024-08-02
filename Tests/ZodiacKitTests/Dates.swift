@@ -12,6 +12,7 @@ extension ZodiacKitTests {
 
     /// Tests that the service correctly identifies the Western Zodiac sign based on the 
     /// start date of each sign's period.
+    @ZodiacActor 
     func testStartDateReturnsCorrectSign() {
         let testCases: [(day: Int, month: Int, expectedSign: WesternZodiacSign)] = [
             // Each tuple represents the boundary start date for a zodiac sign and the expected sign.
@@ -37,6 +38,7 @@ extension ZodiacKitTests {
 
     /// Tests that the service correctly identifies the Western Zodiac sign based on the 
     /// end date of each sign's period.
+    @ZodiacActor
     func testEndDateReturnsCorrectSign() {
         let testCases: [(day: Int, month: Int, expectedSign: WesternZodiacSign)] = [
             // Each tuple represents the boundary end date for a zodiac sign and the expected sign.
@@ -63,6 +65,7 @@ extension ZodiacKitTests {
 
     /// Tests that the service correctly identifies the Western Zodiac sign for dates falling 
     /// in the middle of each sign's period.
+    @ZodiacActor
     func testDateInMiddleReturnsCorrectSign() {
         let orderedSigns: [WesternZodiacSign] = [
             .aquarius, .pisces, .aries, .taurus, .gemini,

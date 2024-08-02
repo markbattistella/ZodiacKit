@@ -8,6 +8,7 @@ import Foundation
 
 /// Contains the default set of Western Zodiac signs and their associated date ranges.
 /// These defaults are used by `ZodiacService` if no custom zodiacs are provided.
+@ZodiacActor
 public let defaultZodiacs: [WesternZodiac] = [
 	WesternZodiac(
 		sign: .aquarius,

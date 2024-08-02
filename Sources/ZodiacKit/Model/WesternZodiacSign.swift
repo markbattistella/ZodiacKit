@@ -13,7 +13,7 @@ public typealias Colour = NSColor
 #endif
 
 /// Represents Western zodiac signs
-public enum WesternZodiacSign: String, ZodiacSign {
+public enum WesternZodiacSign: String, ZodiacSign, Sendable {
 
     /// Available list of Western zodiac signs
     case aquarius, aries, cancer, capricorn, gemini, leo, libra,

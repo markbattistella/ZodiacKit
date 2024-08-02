@@ -1,4 +1,4 @@
-// swift-tools-version: 5.8
+// swift-tools-version: 5.10
 
 import PackageDescription
 
@@ -20,7 +20,10 @@ let package = Package(
         .target(
             name: "ZodiacKit",
             dependencies: [],
-			path: "Sources"
+			path: "Sources",
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency")
+            ]
 		),
         .testTarget(
             name: "ZodiacKitTests",
