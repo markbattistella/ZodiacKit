@@ -5,9 +5,9 @@
 
 # ZodiacKit
 
-![Languages](https://img.shields.io/badge/Languages-Swift%20|%20SwiftUI%20|%20UIKit%20|%20AppKit-white?labelColor=orange&style=flat)
+![Swift Versions](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fmarkbattistella%2FZodiacKit%2Fbadge%3Ftype%3Dswift-versions)
 
-![Platforms](https://img.shields.io/badge/Platforms-iOS%2013+%20|%20iPadOS%2013+%20|%20macOS%2010.15+%20|%20tvOS%2013+-white?labelColor=gray&style=flat)
+![Platforms](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fmarkbattistella%2FZodiacKit%2Fbadge%3Ftype%3Dplatforms)
 
 ![Licence](https://img.shields.io/badge/Licence-MIT-white?labelColor=blue&style=flat)
 
