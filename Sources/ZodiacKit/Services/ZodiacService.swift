@@ -6,139 +6,188 @@
 
 import Foundation
 
-/// A service for determining a person's Western and Chinese zodiac signs based on their birthdate.
-@ZodiacActor
-public struct ZodiacService {
+/// A service responsible for resolving zodiac signs from dates and validating zodiac configurations.
+///
+/// This class supports both Western and Chinese zodiac systems, providing accurate mapping based
+/// on the selected configuration. It is designed to be `@MainActor` safe and integrates smoothly
+/// with SwiftUI via `ObservableObject`.
+@MainActor
+public final class ZodiacService: ObservableObject {
 
-    /// A collection of WesternZodiac objects representing the zodiac signs.
-    private let zodiacs: [WesternZodiac]
+    /// The validated list of Western zodiac sign definitions based on the selected system.
+    @Published public private(set) var zodiacs: [Zodiac] = []
 
-    /// A validator used to validate zodiacs and dates.
-    private let validator = DateValidator()
+    /// The most recent validation error, if any.
+    @Published public private(set) var validationError: ZodiacError? = nil
 
-    /// A mapping from day of the year to WesternZodiacSign.
-    private let dayOfYearToZodiac: [Int: WesternZodiacSign]
+    /// The configured zodiac system (e.g., tropical, sidereal, custom).
+    private let system: WesternZodiacSystem
 
-    /// The Gregorian calendar used for date calculations.
-    private static let gregorianCalendar = Calendar(identifier: .gregorian)
+    /// A mapping from day-of-year to corresponding Western zodiac sign.
+    private let dayOfYearToZodiac: [Int: Western]
 
-    /// Initializes a new ZodiacService with an optional array of WesternZodiac objects.
-    ///
-    /// - Parameter zodiacs: An array of WesternZodiac objects. If not provided, 
-    /// a default set is used.
-    /// - Throws: An error if the provided zodiacs are invalid.
-        public init(zodiacs: [WesternZodiac] = defaultZodiacs) throws {
-            try validator.validate(zodiacs: zodiacs)
-            self.zodiacs = zodiacs
-            self.dayOfYearToZodiac = ZodiacService.mapZodiacsToDaysOfYear(zodiacs: zodiacs,
-                                                                          validator: validator)
-        }
+    /// Indicates whether the zodiac configuration is valid.
+    public var isValid: Bool { validationError == nil }
 
-    /// Maps zodiac periods to days of the year.
-    ///
-    /// - Parameters:
-    ///   - zodiacs: An array of WesternZodiac objects to map.
-    ///   - validator: A DateValidator to validate date components.
-    /// - Returns: A dictionary mapping days of the year to WesternZodiacSigns.
-    private static func mapZodiacsToDaysOfYear(
-        zodiacs: [WesternZodiac],
-        validator: DateValidator
-    ) -> [Int: WesternZodiacSign] {
-        var map: [Int: WesternZodiacSign] = [:]
-        for zodiac in zodiacs {
-            guard let startDayOfYear = try? validator.dayOfYear(
-                    day: zodiac.startDate.day,
-                    month: zodiac.startDate.month),
-                  let endDayOfYear = try? validator.dayOfYear(
-                    day: zodiac.endDate.day,
-                    month: zodiac.endDate.month) else {
-                continue
-            }
-            if startDayOfYear <= endDayOfYear {
-                for day in startDayOfYear...endDayOfYear { map[day] = zodiac.sign }
-            } else {
-                for day in startDayOfYear...365 { map[day] = zodiac.sign }
-                for day in 1...endDayOfYear { map[day] = zodiac.sign }
-            }
-        }
-        return map
+    /// Returns all Chinese zodiac signs in cycle order.
+    public var allChineseZodiacs: [Chinese] {
+        Chinese.allCases
     }
 
-    /// Retrieves the Western zodiac sign for a given date.
-    ///
-    /// - Parameter date: The date for which to find the zodiac sign.
-    /// - Returns: The WesternZodiacSign corresponding to the given date.
-    /// - Throws: ZodiacError.dateCalculationError if the zodiac sign cannot be determined.
-    public func getWesternZodiac(from date: Date) throws -> WesternZodiacSign {
-        guard let dayOfYear = ZodiacService.gregorianCalendar.ordinality(of: .day, in: .year, for: date),
-              let zodiacSign = dayOfYearToZodiac[dayOfYear] else {
-            throw ZodiacError.dateCalculationError
-        }
-        return zodiacSign
+    /// Returns all Western zodiac signs in the current system’s order.
+    public var allWesternZodiacs: [Western] {
+        zodiacs.map(\.sign)
     }
 
-    /// Deprecated: Use getWesternZodiac(from:) instead.
-    @available(*, deprecated, renamed: "getWesternZodiac(from:)", 
-                message: "Use getWesternZodiac(from:) instead.")
-    public func getZodiac(from date: Date) throws -> WesternZodiacSign {
-        try getWesternZodiac(from: date)
+    /// Creates a new instance of `ZodiacService` with the specified zodiac system.
+    ///
+    /// If the configuration fails validation, the service will provide an empty zodiac list
+    /// and set the `validationError` accordingly.
+    ///
+    /// - Parameter system: The zodiac system to use. Defaults to `.tropical`.
+    public init(system: WesternZodiacSystem = .tropical) {
+        self.system = system
+
+        do {
+            let loadedZodiacs = try ZodiacLoader.loadZodiacs(from: system)
+            self.zodiacs = loadedZodiacs
+            self.dayOfYearToZodiac = try ZodiacLoader.mapZodiacsToDaysOfYear(from: loadedZodiacs)
+        } catch let error as ZodiacError {
+            self.validationError = error
+            self.zodiacs = []
+            self.dayOfYearToZodiac = [:]
+        } catch {
+            self.validationError = .invalidData
+            self.zodiacs = []
+            self.dayOfYearToZodiac = [:]
+        }
     }
 }
 
+// MARK: - Public Methods
+
 extension ZodiacService {
 
-    /// Determines the Chinese Zodiac sign based on a given date.
+    /// Resolves the Western zodiac sign for a given date.
     ///
-    /// - Parameter date: The date for which to find the Chinese Zodiac sign.
-    /// - Returns: The ChineseZodiacSign corresponding to the given date.
-    /// - Throws: ZodiacError if the zodiac sign cannot be determined or if data is invalid.
-    public func getChineseZodiac(from date: Date) throws -> ChineseZodiacSign {
-        let chineseDate = convertToChineseDate(from: date)
-        let extractedBranch = try extractBranchFrom(chineseDate: chineseDate)
-        guard let zodiac = branchNameToZodiac(extractedBranch) else {
-            throw ZodiacError.invalidData
+    /// - Parameter date: The date to evaluate.
+    /// - Returns: A `Western` zodiac sign.
+    /// - Throws: `ZodiacError.dayNumberNotFound` if the day could not be mapped.
+    public func getWesternZodiac(from date: Date) throws -> Western {
+        let dayOfYear = try date.dayOfYear()
+        guard let sign = dayOfYearToZodiac[dayOfYear] else {
+            throw ZodiacError.dayNumberNotFound(dayNumber: dayOfYear)
         }
-        return zodiac
+        return sign
     }
 
-    /// Converts a Gregorian date to a Chinese calendar date string.
+    /// Resolves the Chinese zodiac sign for a given Gregorian date.
     ///
-    /// - Parameter date: The date to convert.
-    /// - Returns: A string representing the date in the Chinese calendar.
-    private func convertToChineseDate(from date: Date) -> String {
+    /// - Parameter date: The date to evaluate.
+    /// - Returns: A `Chinese` zodiac sign corresponding to the year of the date.
+    /// - Throws: `ZodiacError.invalidData` if the lunar year cannot be resolved.
+    public func getChineseZodiac(from date: Date) throws -> Chinese {
         let chineseCalendar = Calendar(identifier: .chinese)
-        let formatter = DateFormatter()
-        formatter.calendar = chineseCalendar
-        formatter.dateStyle = .full
-        let chineseDate = formatter.string(from: date)
-        return chineseDate
+        let chineseYearComponent = chineseCalendar.component(.year, from: date)
+        let index = (chineseYearComponent - 1) % Int.chineseZodiacCycle
+        return Chinese.allCases[index]
+    }
+}
+
+// MARK: - Get Metadata
+
+extension ZodiacService {
+
+    /// Returns detailed metadata for a given Western zodiac sign.
+    ///
+    /// - Parameter sign: The sign to retrieve metadata for.
+    /// - Returns: A fully populated `ZodiacOverview` object.
+    public func metadata(for sign: Western) -> ZodiacOverview {
+        .init(
+            name: sign.name,
+            emoji: sign.emoji,
+            element: sign.element,
+            elementEmoji: sign.elementEmoji,
+            modality: sign.modality,
+            polarity: sign.polarity,
+            yinYang: sign.yinYang,
+            rulingPlanetName: sign.rulingPlanetName,
+            traditionalRulingPlanetName: sign.traditionalRulingPlanetName,
+            rulingPlanetSymbol: sign.rulingPlanetSymbol,
+            rulingHouse: sign.rulingHouse,
+            colorHEX: sign.colorHEX,
+            symbol: sign.symbol,
+            symbolEmoji: sign.symbolEmoji,
+            birthstone: sign.birthstone,
+            season: sign.season,
+            brightestStar: sign.brightestStar,
+            characteristics: sign.characteristics,
+            strengths: sign.strengths,
+            weaknesses: sign.weaknesses,
+            keyTraits: sign.keyTraits
+        )
     }
 
-    /// Extracts the zodiac branch name from a Chinese calendar date string.
+    /// Returns detailed metadata for a given Chinese zodiac sign.
     ///
-    /// - Parameter chineseDate: A string representing a date in the Chinese calendar.
-    /// - Returns: The extracted branch name.
-    /// - Throws: ZodiacError.incorrectDateFormat if the date format is incorrect.
-    private func extractBranchFrom(chineseDate: String) throws -> String {
-        guard let hyphen = chineseDate.firstIndex(of: "-") else {
-            throw ZodiacError.incorrectDateFormat
+    /// - Parameter sign: The Chinese sign to retrieve metadata for.
+    /// - Returns: A fully populated `ZodiacOverview` object.
+    public func metadata(for sign: Chinese) -> ZodiacOverview {
+        .init(
+            name: sign.name,
+            emoji: sign.emoji,
+            element: sign.element,
+            elementEmoji: sign.elementEmoji,
+            modality: sign.modality,
+            polarity: sign.polarity,
+            yinYang: sign.yinYang,
+            rulingPlanetName: sign.rulingPlanetName,
+            traditionalRulingPlanetName: sign.traditionalRulingPlanetName,
+            rulingPlanetSymbol: sign.rulingPlanetSymbol,
+            rulingHouse: sign.rulingHouse,
+            colorHEX: sign.colorHEX,
+            symbol: sign.symbol,
+            symbolEmoji: sign.symbolEmoji,
+            birthstone: sign.birthstone,
+            season: sign.season,
+            brightestStar: sign.brightestStar,
+            characteristics: sign.characteristics,
+            strengths: sign.strengths,
+            weaknesses: sign.weaknesses,
+            keyTraits: sign.keyTraits
+        )
+    }
+}
+
+// MARK: - Dates
+
+extension ZodiacService {
+
+    /// Returns the date range associated with a given Western zodiac sign.
+    ///
+    /// - Parameter sign: The zodiac sign to evaluate.
+    /// - Returns: A tuple containing the start and end `Date` values, or `nil` if unavailable.
+    public func range(for sign: Western) -> (start: Date, end: Date)? {
+        guard let zodiac = zodiacs.first(where: { $0.sign == sign }),
+              let startDate = try? zodiac.start.toDate(),
+              let endDate = try? zodiac.end.toDate() else {
+            return nil
         }
-        let startIndex = chineseDate.index(after: hyphen)
-        let endIndex = chineseDate.index(chineseDate.endIndex, offsetBy: -2)
-        let branchExtracted = chineseDate[startIndex ... endIndex]
-        return String(branchExtracted)
+        return (startDate, endDate)
     }
 
-    /// Maps a Chinese Zodiac branch name to its corresponding zodiac sign.
+    /// Determines whether a given date falls within a specified zodiac sign’s range.
     ///
-    /// - Parameter branch: The branch name to map.
-    /// - Returns: An optional ChineseZodiacSign corresponding to the branch name.
-    private func branchNameToZodiac(_ branch: String) -> ChineseZodiacSign? {
-        let dict: [String: ChineseZodiacSign] = [
-            "zi": .rat, "chou": .ox, "yin": .tiger, "mao": .rabbit,
-            "chen": .dragon, "si": .snake, "wu": .horse, "wei": .goat,
-            "shen": .monkey, "you": .rooster, "xu": .dog, "hai": .pig
-        ]
-        return dict[branch]
+    /// - Parameters:
+    ///   - date: The date to check.
+    ///   - sign: The zodiac sign to test against.
+    /// - Returns: `true` if the date falls within the sign’s range, otherwise `false`.
+    /// - Throws: `ZodiacError.dayNumberNotFound` if the day cannot be resolved.
+    public func isInRange(_ date: Date, in sign: Western) throws -> Bool {
+        let dayOfYear = try date.dayOfYear()
+        guard let expectedSign = dayOfYearToZodiac[dayOfYear] else {
+            return false
+        }
+        return expectedSign == sign
     }
 }

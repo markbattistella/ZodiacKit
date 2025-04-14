@@ -7,39 +7,17 @@
 import XCTest
 @testable import ZodiacKit
 
-/// A test suite for validating the functionality of the ZodiacKit, focusing on the `ZodiacService` 
-/// and its ability to accurately determine zodiac signs and validate custom zodiac configurations.
-class ZodiacKitTests: XCTestCase {
+@MainActor
+final class ZodiacKitTests: XCTestCase {
 
-    // MARK: - variables
-
-    /// A `DateValidator` instance used for validating dates within the zodiac service.
-    var validator: DateValidator!
-
-    /// An instance of `ZodiacService` used to perform zodiac sign determination and validation.
     var service: ZodiacService!
 
-    // MARK: - setup
-
-    /// Sets up necessary instances before each test is run. This includes initializing the 
-    /// `validator` and `service` variables.
-    @ZodiacActor
     override func setUp() {
         super.setUp()
-        self.validator = DateValidator()
-        self.service = try? ZodiacService()
+        self.service = ZodiacService()
     }
 
-    // MARK: - helpers
-
-    /// Tests the attributes of a zodiac sign for all cases within a given zodiac sign type.
-    ///
-    /// - Parameters:
-    ///   - attributeName: The name of the attribute being tested.
-    ///   - expectedValues: An array of expected values corresponding to each zodiac sign case.
-    ///   - attributeClosure: A closure that, given a zodiac sign, returns the value of the 
-    ///   attribute to be tested.
-    internal func testAttribute<Z: ZodiacSign, T: Equatable>(
+    internal func assertZodiacAttribute<Z: ZodiacMetadataRepresentable, T: Equatable>(
         attributeName: String,
         expectedValues: [T],
         attributeClosure: (Z) -> T
@@ -53,40 +31,140 @@ class ZodiacKitTests: XCTestCase {
         }
     }
 
-    /// Generates a `Date` object representing a specific day and month, used for testing 
-    /// date-based functionality.
-    ///
-    /// - Parameters:
-    ///   - day: The day of the month.
-    ///   - month: The month of the year.
-    /// - Returns: A `Date` object set to the specified day and month, within a fixed year.
-    internal func generatedWesternDate(day: Int, month: Int) -> Date {
-        let calendar = Calendar.current
-        let components = DateComponents(year: 2000, month: month, day: day)
-        return calendar.date(from: components)!
+    internal func assertZodiacError(
+        _ error: Error,
+        expected: ZodiacError,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) {
+        switch (error, expected) {
+
+            case (ZodiacError.duplicateZodiacsFound, .duplicateZodiacsFound),
+                (ZodiacError.missingZodiacs, .missingZodiacs),
+                (ZodiacError.missingDays, .missingDays),
+                (ZodiacError.overlappingDays, .overlappingDays),
+                (ZodiacError.nonContinuousRanges, .nonContinuousRanges),
+                (ZodiacError.invalidData, .invalidData),
+                (ZodiacError.dayNumberNotFound, .dayNumberNotFound),
+                (ZodiacError.invalidDateComponents, .invalidDateComponents),
+                (ZodiacError.couldNotConstructLeapDate, .couldNotConstructLeapDate),
+                (ZodiacError.couldNotGetDayOfYear, .couldNotGetDayOfYear):
+
+                break // Considered matching — ignoring associated values
+
+            default:
+                XCTFail("Expected \(expected), but got \(error)", file: file, line: line)
+        }
     }
 
-    /// Creates a `WesternZodiac` instance with specified start and end dates, associated with 
-    /// a particular zodiac sign.
-    ///
-    /// - Parameters:
-    ///   - sign: The `WesternZodiacSign` associated with the zodiac period being created.
-    ///   - startDay: The starting day of the zodiac period.
-    ///   - startMonth: The starting month of the zodiac period.
-    ///   - endDay: The ending day of the zodiac period.
-    ///   - endMonth: The ending month of the zodiac period.
-    /// - Returns: A `WesternZodiac` instance configured with the specified dates and sign.
-    internal func makeWesternZodiac(
-        sign: WesternZodiacSign,
-        startDay: Int,
-        startMonth: Int,
-        endDay: Int,
-        endMonth: Int
-    ) -> WesternZodiac {
-        return WesternZodiac(
-            sign: sign,
-            startDate: .init(day: startDay, month: startMonth),
-            endDate: .init(day: endDay, month: endMonth)
-        )
+    internal func date(_ day: Int, _ month: Int) -> Date {
+        Calendar.gregorian.date(from: DateComponents(year: .leapYear, month: month, day: day))!
+    }
+
+    internal let systemsToTest: [(WesternZodiacSystem, String)] = [
+        (.tropical, "Tropical"),
+        (.sidereal, "Sidereal"),
+        (.equalLength, "Equal"),
+        (.astronomicalIAU, "IAU"),
+        (.custom(Fixtures.validMonthBasedZodiacs()), "Custom Month-Based")
+    ]
+}
+
+// MARK: - Test Fixtures
+
+internal extension ZodiacKitTests {
+
+    enum Fixtures {
+
+        static func validMonthBasedZodiacs() -> [Zodiac] {
+            return [
+                .init(
+                    sign: .capricorn,
+                    start: .init(day: 1, month: 1),
+                    end: .init(day: 31, month: 1)
+                ),
+                .init(
+                    sign: .aquarius,
+                    start: .init(day: 1, month: 2),
+                    end: .init(day: 29, month: 2)
+                ),
+                .init(
+                    sign: .pisces,
+                    start: .init(day: 1, month: 3),
+                    end: .init(day: 31, month: 3)
+                ),
+                .init(
+                    sign: .aries,
+                    start: .init(day: 1, month: 4),
+                    end: .init(day: 30, month: 4)
+                ),
+                .init(
+                    sign: .taurus,
+                    start: .init(day: 1, month: 5),
+                    end: .init(day: 31, month: 5)
+                ),
+                .init(
+                    sign: .gemini,
+                    start: .init(day: 1, month: 6),
+                    end: .init(day: 30, month: 6)
+                ),
+                .init(
+                    sign: .cancer,
+                    start: .init(day: 1, month: 7),
+                    end: .init(day: 31, month: 7)
+                ),
+                .init(
+                    sign: .leo,
+                    start: .init(day: 1, month: 8),
+                    end: .init(day: 31, month: 8)
+                ),
+                .init(
+                    sign: .virgo,
+                    start: .init(day: 1, month: 9),
+                    end: .init(day: 30, month: 9)
+                ),
+                .init(
+                    sign: .libra,
+                    start: .init(day: 1, month: 10),
+                    end: .init(day: 31, month: 10)
+                ),
+                .init(
+                    sign: .scorpio,
+                    start: .init(day: 1, month: 11),
+                    end: .init(day: 30, month: 11)
+                ),
+                .init(
+                    sign: .sagittarius,
+                    start: .init(day: 1, month: 12),
+                    end: .init(day: 31, month: 12)
+                )
+            ]
+        }
+
+        static func withMissingDates() -> [Zodiac] {
+            var zodiacs = validMonthBasedZodiacs()
+            zodiacs[0] = .init(
+                sign: .capricorn,
+                start: .init(day: 1, month: 1),
+                end: .init(day: 30, month: 1)
+            )
+            return zodiacs
+        }
+
+        static func withOverlappingDates() -> [Zodiac] {
+            var zodiacs = validMonthBasedZodiacs()
+            zodiacs[1] = .init(
+                sign: .aquarius,
+                start: .init(day: 31, month: 1),
+                end: .init(day: 29, month: 2)
+            )
+            return zodiacs
+        }
+
+        static func withDuplicateSigns() -> [Zodiac] {
+            var zodiacs = validMonthBasedZodiacs()
+            zodiacs[1] = zodiacs[0]
+            return zodiacs
+        }
     }
 }
