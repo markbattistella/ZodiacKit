@@ -93,40 +93,33 @@ extension ZodiacService {
     /// - Returns: The ChineseZodiacSign corresponding to the given date.
     /// - Throws: ZodiacError if the zodiac sign cannot be determined or if data is invalid.
     public func getChineseZodiac(from date: Date) throws -> ChineseZodiacSign {
-        let chineseDate = convertToChineseDate(from: date)
-        let extractedBranch = try extractBranchFrom(chineseDate: chineseDate)
-        guard let zodiac = branchNameToZodiac(extractedBranch) else {
+        guard let branch = getChineseZodiacBranch(from: date),
+              let zodiac = branchNameToZodiac(branch) else {
             throw ZodiacError.invalidData
         }
         return zodiac
     }
 
-    /// Converts a Gregorian date to a Chinese calendar date string.
+    /// Determines the Earthly Branch associated with the Chinese Zodiac year for a given date.
     ///
-    /// - Parameter date: The date to convert.
-    /// - Returns: A string representing the date in the Chinese calendar.
-    private func convertToChineseDate(from date: Date) -> String {
+    /// This method calculates the cyclical year in the Chinese calendar and maps it to
+    /// one of the twelve Earthly Branches used in the Chinese Zodiac system. The branch
+    /// is returned as a lowercase Pinyin string (e.g., "zi" for Rat, "chou" for Ox).
+    ///
+    /// - Parameter date: The Gregorian date for which to determine the Chinese Zodiac branch.
+    /// - Returns: A Pinyin string representing the Earthly Branch (e.g., "zi", "chou", "yin"), 
+    // or `nil` if the year could not be determined.
+    private func getChineseZodiacBranch(from date: Date) -> String? {
         let chineseCalendar = Calendar(identifier: .chinese)
-        let formatter = DateFormatter()
-        formatter.calendar = chineseCalendar
-        formatter.dateStyle = .full
-        let chineseDate = formatter.string(from: date)
-        return chineseDate
-    }
+        let components = chineseCalendar.dateComponents([.year], from: date)
 
-    /// Extracts the zodiac branch name from a Chinese calendar date string.
-    ///
-    /// - Parameter chineseDate: A string representing a date in the Chinese calendar.
-    /// - Returns: The extracted branch name.
-    /// - Throws: ZodiacError.incorrectDateFormat if the date format is incorrect.
-    private func extractBranchFrom(chineseDate: String) throws -> String {
-        guard let hyphen = chineseDate.firstIndex(of: "-") else {
-            throw ZodiacError.incorrectDateFormat
+        guard let cyclicalYear = components.year else {
+            return nil
         }
-        let startIndex = chineseDate.index(after: hyphen)
-        let endIndex = chineseDate.index(chineseDate.endIndex, offsetBy: -2)
-        let branchExtracted = chineseDate[startIndex ... endIndex]
-        return String(branchExtracted)
+
+        let branchIndex = (cyclicalYear - 1) % 12
+        let branches = ["zi", "chou", "yin", "mao", "chen", "si", "wu", "wei", "shen", "you", "xu", "hai"]
+        return branches[branchIndex]
     }
 
     /// Maps a Chinese Zodiac branch name to its corresponding zodiac sign.
