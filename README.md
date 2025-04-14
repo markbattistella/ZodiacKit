@@ -13,56 +13,32 @@
 
 </div>
 
-**ZodiacKit** is a Swift package that allows you to fetch Western and Chinese Zodiac Sign information based on a given date. It provides a simple, efficient, and easily integrable solution for applications that deal with astrological data.
-
-## Table of Contents
-
-- [Description](#description)
-- [Installation](#installation)
-- [Usage](#usage)
-  - [Basic Usage](#basic-usage)
-  - [Custom date ranges (Western only)](#custom-date-ranges-western-only)
-  - [In-app usage](#in-app-usage)
-    - [UIKit](#uikit)
-    - [SwiftUI](#swiftui)
-    - [AppKit](#appkit)
-- [Default Date Ranges](#default-date-ranges)
-- [Validation](#validation)
-  - [Date Range Overlap](#date-range-overlap)
-  - [Missing Dates](#missing-dates)
-  - [Duplicated Zodiac Signs](#duplicated-zodiac-signs)
-  - [Missing Zodiac Signs](#missing-zodiac-signs)
-  - [Invalid Dates](#invalid-dates)
-- [Error handling](#error-handling)
-- [Attributes](#attributes)
-  - [`WesternZodiacSign`](#westernzodiacsign)
-  - [`ChineseZodiacSign`](#chinesezodiacsign)
-    - [Characteristics and Compatibility](#characteristics-and-compatibility)
-- [Important Notes](#important-notes)
-- [Contributing](#contributing)
-- [License](#license)
+`ZodiacKit` is a Swift package that determines **Western** and **Chinese** zodiac signs from a given date. It supports multiple astrological systems, provides extensive zodiac metadata, and includes strong validation with clear error handling.
 
 ## Description
 
-ZodiacKit contains a `ZodiacService` struct that helps you retrieve the Western and Chinese zodiac signs. It can then find a zodiac sign based on a `Date`.
+`ZodiacKit` makes it easy to:
 
-This package validates zodiac date ranges and throws relevant errors if inconsistencies are found. Errors include overlapping date ranges, missing dates, duplicated zodiac signs, and missing zodiac signs.
+- Fetch a user's **Western zodiac sign** based on one of four systems (Tropical, Sidereal, Equal-Length, or Astronomical).
+- Determine their **Chinese zodiac sign** based on the lunar new year.
+- Access traits, elements, ruling planets, emojis, and compatibility details.
+- Validate zodiac date ranges with automatic error detection.
 
-The `WesternZodiacSign` and `ChineseZodiacSign` enums are an easily readable and accessible way to represent relevant zodiac signs in the Swift language.
-
-They include various properties like the sign name, its worldly element, an emoji representation, yin-yang, and more. This can be a valuable resource when developing an application dealing with zodiac signs.
+`ZodiacKit` includes a `ZodiacService` class and robust enums for both `Western` and `Chinese` signs.
 
 ## Installation
 
-The ZodiacKit package uses Swift Package Manager (SPM) for easy addition. Follow these steps to add it to your project:
+Add `ZodiacKit` to your Swift project using Swift Package Manager.
 
-1. In Xcode, click `File -> Swift Packages -> Add Package Dependency`.
-2. In the search bar, type `https://github.com/markbattistella/ZodiacKit` and click `Next`.
-3. Specify the version you want to use. You can select the exact version, use the latest one, or set a version range, and then click `Next`.
-4. Finally, select the target in which you want to use `ZodiacKit` and click `Finish`.
+```swift
+dependencies: [
+  .package(url: "https://github.com/markbattistella/ZodiacKit", from: "x.y.z")
+]
+```
 
 > [!CAUTION]
-> `v1.x` to `v2.x` has some breaking changes - mainly in the naming for `Sign` now being prefixed with `Western` or `Chinese` since the addition of extra Zodiacs.
+> `v1.x` to `v2.x` has some breaking changes.
+> `v2.x` to `v3.x` has some breaking changes.
 
 ## Usage
 
@@ -90,14 +66,14 @@ let chineseZodiacSign = try? zodiacService.getChineseZodiac(from: birthDate!)
 
 This will give you the corresponding information and attributes based on the date provided.
 
-You can then use the properties of the `WesternZodiacSign` and `ChineseZodiacSign` to get information about those zodiac signs.
+You can then use the properties of the `Western` and `Chinese` to get information about those zodiac signs.
 
 #### Custom date ranges (Western only)
 
-If you want to use custom zodiac date ranges instead of the defaults (for the `WesternZodiacSign`), you can do so by passing a custom array of `WesternZodiac` structs during `ZodiacService` initialisation:
+If you want to use custom zodiac date ranges instead of the defaults (for the `Western`), you can do so by passing a custom array of `Zodiac` structs during `ZodiacService` initialisation:
 
 ```swift
-let customZodiacs: [WesternZodiac] = [
+let customZodiacs: [Zodiac] = [
   Zodiac(
     sign: .aquarius,
     startDate: .init(day: 22, month: 1),
@@ -106,7 +82,7 @@ let customZodiacs: [WesternZodiac] = [
   // ...
 ]
 
-let zodiacService = try? ZodiacService(zodiacs: customZodiacs)
+let zodiacService = try? ZodiacService(system: .custom(customZodiacs))
 ```
 
 ### In-app usage
@@ -150,31 +126,31 @@ import SwiftUI
 import ZodiacKit
 
 struct ContentView: View {
-    @State private var westernZodiacSign: WesternZodiacSign?
-    @State private var chineseZodiacSign: ChineseZodiacSign?
+  @StateObject private var zodiacService = ZodiacService()
 
-    var body: some View {
-        VStack {
-            if let westernSign = westernZodiacSign,
-               let chineseSign = chineseZodiacSign {
-                Text("Your zodiac sign is \(westernSign.name)")
-                Text("Your Chinese Zodiac sign is: \(chineseSign.name)")
-            } else {
-                Text("Failed to get zodiac sign")
-            }
-        }.onAppear {
-            do {
-                let zodiacService = try ZodiacService()
-                let dateComponents = DateComponents(year: 1991, month: 5, day: 29)
-                let birthDate = Calendar.current.date(from: dateComponents)
+  @State private var westernZodiacSign: WesternZodiacSign?
+  @State private var chineseZodiacSign: ChineseZodiacSign?
 
-                westernZodiacSign = try zodiacService.getWesternZodiac(from: birthDate!)
-                chineseZodiacSign = try zodiacService.getChineseZodiac(from: birthDate!)
-            } catch {
-                print("Failed to get zodiac sign: \(error)")
-            }
-        }
+  var body: some View {
+    VStack {
+      if let westernSign = westernZodiacSign, let chineseSign = chineseZodiacSign {
+        Text("Your zodiac sign is \(westernSign.name)")
+        Text("Your Chinese Zodiac sign is: \(chineseSign.name)")
+      } else {
+        Text("Failed to get zodiac sign")
+      }
     }
+    .task {
+      do {
+        let dateComponents = DateComponents(year: 1991, month: 5, day: 29)
+        let birthDate = Calendar.current.date(from: dateComponents)
+        westernZodiacSign = try zodiacService.getWesternZodiac(from: birthDate!)
+        chineseZodiacSign = try zodiacService.getChineseZodiac(from: birthDate!)
+      } catch {
+        print("Failed to get zodiac sign: \(error)")
+      }
+    }
+  }
 }
 ```
 
@@ -210,88 +186,183 @@ class ViewController: NSViewController {
 
 ## Default Date Ranges
 
-By default, this package uses the following date ranges for each zodiac sign in the Western format:
+### Tropical System
 
-| Zodiac Sign  | Start Date Range | End Date Range |
-|--------------|------------------|----------------|
-| Aquarius     | January 20       | February 18    |
-| Pisces       | February 19      | March 20       |
-| Aries        | March 21         | April 19       |
-| Taurus       | April 20         | May 20         |
-| Gemini       | May 21           | June 20        |
-| Cancer       | June 21          | July 22        |
-| Leo          | July 23          | August 22      |
-| Virgo        | August 23        | September 22   |
-| Libra        | September 23     | October 22     |
-| Scorpio      | October 23       | November 21    |
-| Sagittarius  | November 22      | December 21    |
-| Capricorn    | December 22      | January 19     |
+This is the one most commonly used in Western astrology.
+
+| Zodiac Sign  | Start Date       | End Date         |
+|--------------|------------------|------------------|
+| Aquarius     | January 20       | February 18      |
+| Pisces       | February 19      | March 20         |
+| Aries        | March 21         | April 19         |
+| Taurus       | April 20         | May 20           |
+| Gemini       | May 21           | June 20          |
+| Cancer       | June 21          | July 22          |
+| Leo          | July 23          | August 22        |
+| Virgo        | August 23        | September 22     |
+| Libra        | September 23     | October 22       |
+| Scorpio      | October 23       | November 21      |
+| Sagittarius  | November 22      | December 21      |
+| Capricorn    | December 22      | January 19       |
+
+### Sidereal System (Vedic)
+
+Based on the actual position of constellations in the sky, accounting for precession.
+
+| Zodiac Sign  | Start Date       | End Date         |
+|--------------|------------------|------------------|
+| Aries        | April 14         | May 14           |
+| Taurus       | May 15           | June 15          |
+| Gemini       | June 16          | July 16          |
+| Cancer       | July 17          | August 17        |
+| Leo          | August 18        | September 17     |
+| Virgo        | September 18     | October 17       |
+| Libra        | October 18       | November 17      |
+| Scorpio      | November 18      | December 16      |
+| Sagittarius  | December 17      | January 14       |
+| Capricorn    | January 15       | February 12      |
+| Aquarius     | February 13      | March 14         |
+| Pisces       | March 15         | April 13         |
+
+### Equal-Length System
+
+Each sign gets approximately 30.4 days, ignoring constellation size. Based on reconstructed Hellenistic tradition.
+
+| Zodiac Sign  | Start Date       | End Date         |
+|--------------|------------------|------------------|
+| Aries        | April 16         | May 11           |
+| Taurus       | May 12           | June 6           |
+| Gemini       | June 7           | July 2           |
+| Cancer       | July 3           | July 28          |
+| Leo          | July 29          | August 23        |
+| Virgo        | August 24        | September 18     |
+| Libra        | September 19     | October 13       |
+| Scorpio      | October 14       | November 8       |
+| Sagittarius  | November 9       | December 3       |
+| Capricorn    | December 4       | December 29      |
+| Aquarius     | December 30      | January 24       |
+| Pisces       | January 25       | February 20      |
+
+### Astronomical (IAU) System
+
+This system follows the actual star boundaries defined by the International Astronomical Union. Sign durations vary significantly.
+
+| Zodiac Sign  | Start Date       | End Date         |
+|--------------|------------------|------------------|
+| Aries        | April 18         | May 13           |
+| Taurus       | May 13           | June 21          |
+| Gemini       | June 21          | July 20          |
+| Cancer       | July 20          | August 10        |
+| Leo          | August 10        | September 16     |
+| Virgo        | September 16     | October 30       |
+| Libra        | October 30       | November 23      |
+| Scorpio      | November 23      | November 29      |
+| Sagittarius  | December 17      | January 20       |
+| Capricorn    | January 20       | February 16      |
+| Aquarius     | February 16      | March 11         |
+| Pisces       | March 11         | April 18         |
 
 ## Validation
 
-ZodiacKit includes built-in validation to ensure the consistency and correctness of the provided zodiac sign data.
+`ZodiacKit` includes built-in validation to ensure the consistency and correctness of the provided zodiac sign data.
 
 During the initialisation of `ZodiacService`, the package performs several checks:
 
-### Date Range Overlap
+1. Ensures no duplicate signs exist.
+2. Ensures all expected signs are included (internal use only).
+3. Ensures every day of the year is covered by one and only one zodiac.
+4. Ensures there are no overlapping date ranges.
+5. Ensures the date ranges are continuous from day 1 through 366.
 
-The package checks to make sure that the date ranges of all zodiac signs do not overlap. Overlapping date ranges could lead to ambiguous results when determining the zodiac sign for a particular date.
+## Error Handling
 
-### Missing Dates
+`ZodiacKit` performs several validations to ensure data consistency and accuracy. If an issue is found during initialisation or zodiac lookup, it throws a `ZodiacError`.
 
-All dates in a year must be covered by the defined zodiac signs. If there are any gaps in the date ranges, ZodiacKit will throw an error.
+Below are the possible errors:
 
-### Duplicated Zodiac Signs
+| Error Case | Description |
+|-|-|
+| `invalidDateComponents(date:)` | The provided `Date` has missing or invalid components such as a nil day or month. |
+| `couldNotConstructLeapDate(month:day:)` | A valid leap-year date could not be formed from the given month and day, likely due to an invalid combination (e.g. February 30). |
+| `couldNotGetDayOfYear(adjustedDate:)` | The system failed to calculate the day of the year from the adjusted date, often due to invalid or out-of-range values. |
+| `duplicateZodiacsFound(duplicates:)` | There are multiple definitions for the same zodiac sign, indicating a configuration conflict. |
+| `missingZodiacs(missing:)` | Some expected zodiac signs were not defined, making the system incomplete. |
+| `missingDays(missingDays:)` | One or more calendar days aren’t assigned to any zodiac sign, causing coverage gaps. |
+| `overlappingDays(days:)` | Some days are assigned to more than one zodiac sign, violating the one-sign-per-day rule. |
+| `nonContinuousRanges` | Zodiac ranges don't form a complete, gap-free sequence from day 1 through 366. |
+| `invalidData` | Zodiac data is corrupted or couldn't be parsed correctly. |
+| `dayNumberNotFound(dayNumber:)` | No zodiac sign could be determined for a specific day of the year, typically due to misconfiguration. |
 
-The package ensures that each zodiac sign is unique and defined only once. If the same sign is defined multiple times with different date ranges, an error is thrown.
-
-### Missing Zodiac Signs
-
-All twelve zodiac signs must be represented. If any are missing, an error will be thrown.
-
-### Invalid Dates
-
-The package checks if the start or end date of any zodiac sign is invalid (e.g., February 30). If an invalid date is found, an error is thrown.
-
-These validations help ensure that the zodiac sign data you are working with is accurate and that the service will return correct results. If any of these validations fail, the `ZodiacService` initialisation will throw an error. It's essential to catch and handle these errors in your application to ensure a smooth user experience.
-
-Here's an example of how to handle errors during `ZodiacService` initialisation:
-
-```swift
-do {
-    let zodiacService = try ZodiacService()
-    // Use zodiacService...
-} catch {
-    print("Failed to initialize ZodiacService: \(error)")
-}
-```
-
-The thrown error will be of type `ZodiacService.ZodiacError,` which you can use to provide more specific error handling or messaging in your application.
-
-## Error handling
-
-ZodiacKit performs multiple validations to ensure consistency and correctness of the data. Here's a table that includes each `ZodiacError` that the `ZodiacService` might throw:
-
-| Error              | Description |
-|--------------------|-------------|
-| `dateRangeOverlap` | Thrown when the date ranges of the zodiac signs overlap. |
-| `missingDates`     | Thrown when there are missing dates that no zodiac sign covers. |
-| `duplicatedSigns`  | Thrown when the same zodiac sign is defined more than once. |
-| `missingSigns`     | Thrown when not all zodiac signs are represented. |
-| `invalidDates`     | Thrown when a date that doesn't exist in the Gregorian calendar (e.g., February 30) is used. |
-
-Each error is an enum case and carries associated data. For example, the `dateRangeOverlap` error carries two `Zodiac` structs that have overlapping date ranges. You can use this data to provide detailed error messages.
-
-Here's an example of handling a `dateRangeOverlap` error:
+### Example
 
 ```swift
-do {
-    let zodiacService = try ZodiacService()
-    // Use zodiacService...
-} catch ZodiacService.ZodiacError.dateRangeOverlap(let firstZodiac, let secondZodiac) {
-    print("\(firstZodiac.sign) and \(secondZodiac.sign) have overlapping date ranges.")
-} catch {
-    print("An unknown error occurred.")
+/// A demo view that shows zodiac sign results from multiple Western systems and the Chinese zodiac. Users can select a date, and the relevant signs are calculated and displayed.
+struct ZodiacDemo: View {
+  @StateObject private var serviceTropical = ZodiacService(system: .tropical)
+  @StateObject private var serviceSidereal = ZodiacService(system: .sidereal)
+  @StateObject private var serviceEqual = ZodiacService(system: .equalLength)
+  @StateObject private var serviceIAU = ZodiacService(system: .astronomicalIAU)
+
+  @State private var western: (
+    tropical: Western,
+    sidereal: Western,
+    equal: Western,
+    iau: Western
+  )? = nil
+
+  @State private var chinese: Chinese? = nil
+  @State private var selectedDate: Date = .now
+
+  var body: some View {
+    Form {
+      if let western {
+        Section("Western Zodiac") {
+          LabeledContent("Tropical", value: western.tropical.name)
+          LabeledContent("Sidereal", value: western.sidereal.name)
+          LabeledContent("Equal Length", value: western.equal.name)
+          LabeledContent("Astronomical IAU", value: western.iau.name)
+        }
+      }
+
+      if let chinese {
+        Section("Chinese Zodiac") {
+          LabeledContent("Chinese", value: chinese.name)
+        }
+      }
+
+      DatePicker(
+        "Select a date",
+        selection: $selectedDate,
+        displayedComponents: [.date]
+      )
+      .datePickerStyle(.graphical)
+    }
+    .task { loadZodiac(for: selectedDate) }
+    .onChange(of: selectedDate) { _, newDate in
+      loadZodiac(for: newDate)
+    }
+    .scrollBounceBehavior(.basedOnSize)
+  }
+
+  /// Loads zodiac signs for all supported systems based on the given date.
+  /// Western signs are loaded from four different systems, and Chinese zodiac is shared across.
+  private func loadZodiac(for date: Date) {
+    Task {
+      do {
+        let tropical = try serviceTropical.getWesternZodiac(from: date)
+        let sidereal = try serviceSidereal.getWesternZodiac(from: date)
+        let equal = try serviceEqual.getWesternZodiac(from: date)
+        let iau = try serviceIAU.getWesternZodiac(from: date)
+
+        self.western = (tropical, sidereal, equal, iau)
+        self.chinese = try serviceTropical.getChineseZodiac(from: date)
+      } catch {
+        print("Failed to get zodiac signs: \(error.localizedDescription)")
+        self.western = nil
+        self.chinese = nil
+      }
+    }
+  }
 }
 ```
 
@@ -299,54 +370,70 @@ do {
 
 ### `WesternZodiacSign`
 
-| Attribute | Description | Possible Values |
-|-|-|-|
-| `name` | The capitalised name of the zodiac sign, derived directly from the enum case value. | Aquarius, Aries, Cancer, Capricorn, Gemini, Leo, Libra, Pisces, Sagittarius, Scorpio, Taurus, Virgo |
-| `worldlyElement` | Represents one of the four classical elements (Air, Fire, Water, Earth) associated with the zodiac sign, indicating the sign's nature and temperament. | Air (Aquarius, Gemini, Libra), Fire (Aries, Leo, Sagittarius), Water (Cancer, Scorpio, Pisces), Earth (Capricorn, Taurus, Virgo) |
-| `worldlyElementEmoji` | An emoji symbolising the worldly element (💨 for Air, 🔥 for Fire, 💧 for Water, 🪨 for Earth) associated with the zodiac sign. | 💨 (Air), 🔥 (Fire), 💧 (Water), 🪨 (Earth) |
-| `emoji` | The astrological symbol emoji representing the zodiac sign (e.g., ♈️ for Aries). | ♒️, ♈️, ♋️, ♑️, ♊️, ♌️, ♎️, ♓️, ♐️, ♏️, ♉️, ♍️ |
-| `color` | The colour traditionally associated with the zodiac sign, using system colours for compatibility with UI elements (e.g., `.systemBlue` for Aquarius). | `.systemBlue`, `.systemRed`, `.systemPurple`, `.black`, `.systemYellow`, `.systemOrange`, `.systemPink`, `.systemGreen`, `.systemBrown`, `.magenta`, `.gray` |
-| `rulingPlanetName` | The name of the planet or celestial body that rules over the zodiac sign, reflecting certain personality traits and aspects (e.g., "Mars" for Aries). | Mars, Venus, Mercury, Moon, Sun, Jupiter, Saturn, Uranus, Neptune, Pluto |
-| `rulingPlanet` | The astrological symbol of the ruling planet or celestial body associated with the zodiac sign (e.g., "♂" for Mars, ruling planet of Aries). | ♂ (Mars), ♀ (Venus), ☿ (Mercury), ☽ (Moon), ☉ (Sun), ♃ (Jupiter), ♄ (Saturn), ♅ (Uranus), ♆ (Neptune), ♇ (Pluto) |
+| Attribute | Description | Example / Values |
+|-----------|-------------|------------------|
+| `name` | The capitalised name of the sign. | `"Leo"` |
+| `emoji` | An emoji representing the astrological glyph. | ♈️, ♉️, ♊️ |
+| `element` | The associated classical element. | `"Fire"`, `"Earth"` |
+| `elementEmoji` | Emoji for the element. | 🔥, 🌍 |
+| `characteristics` | Primary personality descriptors. | `["Bold", "Loyal", "Dramatic"]` |
+| `colorHEX` | Associated HEX colour value. | `#FFD700`, `#FF4500` |
+| `color` | Platform-agnostic colour (derived from `colorHEX`). | `.init(hex: "#FFD700")` |
+| `rulingPlanetName` | Modern ruling planet. | `"Sun"`, `"Mars"` |
+| `traditionalRulingPlanetName` | Traditional ruling planet (if different). | `"Earth"` |
+| `rulingPlanetSymbol` | Planetary symbol. | `☉`, `♂` |
+| `modality` | Cardinal, Fixed, or Mutable. | `"Fixed"` |
+| `polarity` | Astrological polarity. | `"Positive"` |
+| `rulingHouse` | Governing astrological house. | `"5th House"` |
+| `brightestStar` | Brightest star in constellation. | `"Regulus"` |
+| `yinYang` | Yin or Yang classification. | `"Yang"` |
+| `season` | Season associated with the sign. | `"Summer"` |
+| `symbol` | Symbolic name of the sign. | `"Lion"` |
+| `symbolEmoji` | Emoji representation of symbol. | 🦁 |
+| `birthstone` | Traditional birthstone. | `"Peridot"` |
+| `strengths` | Strong qualities. | `["Creative", "Warm-hearted"]` |
+| `weaknesses` | Common flaws. | `["Arrogant", "Stubborn"]` |
+| `keyTraits` | Distilled trait summary. | `["Leader", "Passionate"]` |
+| `bestMatches` | Highly compatible signs. | `[.aries, .sagittarius]` |
+| `averageMatches` | Neutral compatibility signs. | `[.gemini, .libra]` |
+| `conflictingMatches` | Possible tension with these signs. | `[.taurus, .scorpio]` |
+| `harmfulMatches` | Signs with strong incompatibility. | `[.capricorn, .virgo]` |
 
 ### `ChineseZodiacSign`
 
-| Attribute | Description | Possible Values |
-|-|-|-|
-| `name` | The capitalised name of the zodiac animal sign, derived directly from the enum case value. | Rat, Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog, Pig |
-| `fixedElement` | Represents the element (Wood, Fire, Earth, Metal, Water) that is fixed for each zodiac sign, symbolising core aspects of the sign's nature. | Water (Rat, Pig), Earth (Ox, Dragon, Goat, Dog), Wood (Tiger, Rabbit), Fire (Snake, Horse), Metal (Monkey, Rooster) |
-| `fixedElementEmoji` | An emoji symbolising the fixed element (💧 for Water, 🪨 for Earth, 🪵 for Wood, 🔥 for Fire, 🔗 for Metal) associated with the zodiac sign. | 💧 (Water), 🪨 (Earth), 🪵 (Wood), 🔥 (Fire), 🔗 (Metal) |
-| `emoji` | The emoji representation of the Chinese zodiac animal (e.g., 🐂 for Ox). | 🐀, 🐂, 🐅, 🐇, 🐉, 🐍, 🐎, 🐐, 🐒, 🐓, 🐕, 🐖 |
-| `yinYang` | Indicates the Yin or Yang nature of the sign, reflecting the sign's inherent energy and philosophy in Chinese astrology. | Yin (Rat, Ox, Tiger, Rabbit, Snake, Monkey, Rooster, Pig), Yang (Dragon, Horse, Goat, Dog) |
-
-#### Characteristics and Compatibility
-
-A list of descriptive characteristics attributed to the zodiac sign and other zodiac signs that are most compatible with the sign in question.
-
-| Zodiac | Characteristics | Compatibility |
-|-|-|-|
-| `Rat` | Intelligence, Adaptability, Quick-wit, Charm, Artistry, Gregariousness. | `Dragon`, `Monkey` |
-| `Ox` | Loyalty, Reliability, Thoroughness, Strength, Reasonability, Steadiness, Determination. | `Rat`, `Rooster`, `Snake` |
-| `Tiger` | Enthusiasm, Courage, Ambition, Leadership, Confidence, Charisma. | `Horse`, `Dog` |
-| `Rabbit` | Trustworthiness, Empathy, Modesty, Diplomacy, Sincerity, Sociability. | `Goat`, `Pig`, `Dog` |
-| `Dragon` | Luckiness, Flexibility, Eccentricity, Imagination, Artistry, Spirituality. | `Rooster`, `Rat`, `Monkey` |
-| `Snake` | Philosophical, Organised, Intelligent, Intuitive, Elegant, Attentive, Decisive. | `Ox`, `Rooster` |
-| `Horse` | Adaptability, Loyalty, Courage, Ambition, Intelligence, Adventure, Strong freedom. | `Tiger`, `Dog`, `Goat` |
-| `Goat` | Imagination, Creativity, Empathy, Generosity, Honesty, Persistence, Gentleness. | `Rabbit`, `Horse`, `Pig` |
-| `Monkey` | Intelligence, Adaptability, Quick-wit, Charm, Luck, Flexibility. | `Rat`, `Dragon` |
-| `Rooster` | Honesty, Energy, Intelligence, Flamboyance, Flexibility, Diversity, Confidence. | `Ox`, `Dragon`, `Snake` |
-| `Dog` | Loyalty, Sincerity, Reliability, Intelligence, Sociability, Understanding, Patience. | `Tiger`, `Rabbit`, `Horse` |
-| `Pig` | Honesty, Sincerity, Tolerance, Hardworking, Generosity, Optimism, Peace. | `Goat`, `Rabbit` |
-
-## Important Notes
-
-- This package is locale-independent and assumes a Gregorian calendar.
-- Error handling is crucial when dealing with `ZodiacService`. Make sure to catch and properly handle any exceptions that may be thrown.
+| Attribute | Description | Example / Values |
+|-----------|-------------|------------------|
+| `name` | The capitalised name of the zodiac animal. | `"Tiger"` |
+| `emoji` | Emoji representing the animal. | 🐅 |
+| `element` | Classical element associated with the sign. | `"Wood"` |
+| `elementEmoji` | Emoji for the element. | 🪵 |
+| `characteristics` | Descriptive traits. | `["Courageous", "Ambitious"]` |
+| `colorHEX` | HEX value for sign colour. | `#FFA500` |
+| `color` | Platform-agnostic colour object. | `.init(hex: "#FFA500")` |
+| `rulingPlanetName` | Associated planet. | `"Jupiter"` |
+| `traditionalRulingPlanetName` | Optional traditional ruler. | `"Saturn"` |
+| `rulingPlanetSymbol` | Planetary symbol. | ♃ |
+| `modality` | Yin or Yang descriptor. | `"Yang"` |
+| `polarity` | Energetic polarity (Positive/Negative). | `"Positive"` |
+| `rulingHouse` | Seasonal/directional alignment. | `"East"` |
+| `brightestStar` | Notable star in the sign's constellation. | `"Aldebaran"` |
+| `yinYang` | Yin or Yang classification. | `"Yang"` |
+| `season` | Season most aligned with the sign. | `"Spring"` |
+| `symbol` | Animal or mythical creature. | `"Tiger"` |
+| `symbolEmoji` | Emoji for symbol. | 🐅 |
+| `birthstone` | Birthstone of the sign. | `"Jade"` |
+| `strengths` | Positive traits. | `["Brave", "Energetic"]` |
+| `weaknesses` | Typical challenges. | `["Reckless", "Impatient"]` |
+| `keyTraits` | Key summarised traits. | `["Fierce", "Leader", "Adventurous"]` |
+| `bestMatches` | Highly compatible signs. | `[.horse, .dragon]` |
+| `averageMatches` | Moderately compatible. | `[.rat, .rooster]` |
+| `conflictingMatches` | Signs with potential conflict. | `[.monkey, .snake]` |
+| `harmfulMatches` | Traditionally avoided matches. | `[.goat, .ox]` |
 
 ## Contributing
 
 Contributions are more than welcome. If you find a bug or have an idea for an enhancement, please open an issue or provide a pull request. Please follow the code style present in the current code base when making contributions.
 
-## License
+## Licence
 
-The Zodiac Signs package is released under the MIT license. See [LICENSE](https://github.com/markbattistella/ZodiacKit/blob/main/LICENSE) for more information.
+The Zodiac Signs package is released under the MIT license. See LICENCE for more information.
