@@ -8,9 +8,44 @@ import Foundation
 
 /// Represents the 12 animals of the Chinese Zodiac.
 public enum Chinese: String, ZodiacSign {
-    case dog, dragon, goat, horse, monkey, ox,
-         pig, rabbit, rat, rooster, snake, tiger
 
+    /// The Dog sign.
+    case dog
+
+    /// The Dragon sign.
+    case dragon
+
+    /// The Goat sign.
+    case goat
+
+    /// The Horse sign.
+    case horse
+
+    /// The Monkey sign.
+    case monkey
+
+    /// The Ox sign.
+    case ox
+
+    /// The Pig sign.
+    case pig
+
+    /// The Rabbit sign.
+    case rabbit
+
+    /// The Rat sign.
+    case rat
+
+    /// The Rooster sign.
+    case rooster
+
+    /// The Snake sign.
+    case snake
+
+    /// The Tiger sign.
+    case tiger
+
+    /// An ordered list of all Chinese Zodiac signs, following the traditional cycle.
     public static var allCases: [Chinese] {
         [.rat, .ox, .tiger, .rabbit, .dragon, .snake,
          .horse, .goat, .monkey, .rooster, .dog, .pig]

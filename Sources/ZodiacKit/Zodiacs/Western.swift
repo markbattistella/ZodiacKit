@@ -9,10 +9,49 @@
 /// Includes the 12 traditional signs, along with optionally recognised signs such as `ophiuchus`
 /// and `cetus`.
 public enum Western: String, ZodiacSign {
-    case aquarius, aries, cancer, capricorn,
-         gemini, leo, libra, pisces,
-         sagittarius, scorpio, taurus, virgo,
-         ophiuchus, cetus
+
+    /// The Aquarius sign.
+    case aquarius
+
+    /// The Aries sign.
+    case aries
+
+    /// The Cancer sign.
+    case cancer
+
+    /// The Capricorn sign.
+    case capricorn
+
+    /// The Gemini sign.
+    case gemini
+
+    /// The Leo sign.
+    case leo
+
+    /// The Libra sign.
+    case libra
+
+    /// The Pisces sign.
+    case pisces
+
+    /// The Sagittarius sign.
+    case sagittarius
+
+    /// The Scorpio sign.
+    case scorpio
+
+    /// The Taurus sign.
+    case taurus
+
+    /// The Virgo sign.
+    case virgo
+
+    /// The Ophiuchus sign — sometimes considered a "13th" zodiac sign in modern astrology.
+    case ophiuchus
+
+    /// The Cetus sign — an extremely rare and unofficial zodiac sign occasionally referenced in
+    /// sidereal astrology.
+    case cetus
 
     /// The 12 traditional zodiac signs, excluding `ophiuchus` and `cetus`.
     /// Used as the base for systems like the tropical and sidereal zodiacs.
