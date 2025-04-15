@@ -190,77 +190,80 @@ class ViewController: NSViewController {
 
 This is the one most commonly used in Western astrology.
 
-| Zodiac Sign  | Start Date       | End Date         |
-|--------------|------------------|------------------|
-| Aquarius     | January 20       | February 18      |
-| Pisces       | February 19      | March 20         |
-| Aries        | March 21         | April 19         |
-| Taurus       | April 20         | May 20           |
-| Gemini       | May 21           | June 20          |
-| Cancer       | June 21          | July 22          |
-| Leo          | July 23          | August 22        |
-| Virgo        | August 23        | September 22     |
-| Libra        | September 23     | October 22       |
-| Scorpio      | October 23       | November 21      |
-| Sagittarius  | November 22      | December 21      |
-| Capricorn    | December 22      | January 19       |
+| Zodiac Sign  | Start Date   | End Date     |
+|--------------|--------------|--------------|
+| Aries        | 21 March     | 19 April     |
+| Taurus       | 20 April     | 20 May       |
+| Gemini       | 21 May       | 20 June      |
+| Cancer       | 21 June      | 22 July      |
+| Leo          | 23 July      | 22 August    |
+| Virgo        | 23 August    | 22 September |
+| Libra        | 23 September | 22 October   |
+| Scorpio      | 23 October   | 21 November  |
+| Sagittarius  | 22 November  | 21 December  |
+| Capricorn    | 22 December  | 19 January   |
+| Aquarius     | 20 January   | 18 February  |
+| Pisces       | 19 February  | 20 March     |
 
 ### Sidereal System (Vedic)
 
 Based on the actual position of constellations in the sky, accounting for precession.
 
-| Zodiac Sign  | Start Date       | End Date         |
-|--------------|------------------|------------------|
-| Aries        | April 14         | May 14           |
-| Taurus       | May 15           | June 15          |
-| Gemini       | June 16          | July 16          |
-| Cancer       | July 17          | August 17        |
-| Leo          | August 18        | September 17     |
-| Virgo        | September 18     | October 17       |
-| Libra        | October 18       | November 17      |
-| Scorpio      | November 18      | December 16      |
-| Sagittarius  | December 17      | January 14       |
-| Capricorn    | January 15       | February 12      |
-| Aquarius     | February 13      | March 14         |
-| Pisces       | March 15         | April 13         |
+| Zodiac Sign  | Start Date   | End Date     |
+|--------------|--------------|--------------|
+| Aries        | 14 April     | 14 May       |
+| Taurus       | 15 May       | 15 June      |
+| Gemini       | 16 June      | 16 July      |
+| Cancer       | 17 July      | 16 August    |
+| Leo          | 17 August    | 16 September |
+| Virgo        | 17 September | 16 October   |
+| Libra        | 17 October   | 15 November  |
+| Scorpio      | 16 November  | 15 December  |
+| Sagittarius  | 16 December  | 14 January   |
+| Capricorn    | 15 January   | 12 February  |
+| Aquarius     | 13 February  | 14 March     |
+| Pisces       | 15 March     | 13 April     |
 
 ### Equal-Length System
 
 Each sign gets approximately 30.4 days, ignoring constellation size. Based on reconstructed Hellenistic tradition.
 
-| Zodiac Sign  | Start Date       | End Date         |
-|--------------|------------------|------------------|
-| Aries        | April 16         | May 11           |
-| Taurus       | May 12           | June 6           |
-| Gemini       | June 7           | July 2           |
-| Cancer       | July 3           | July 28          |
-| Leo          | July 29          | August 23        |
-| Virgo        | August 24        | September 18     |
-| Libra        | September 19     | October 13       |
-| Scorpio      | October 14       | November 8       |
-| Sagittarius  | November 9       | December 3       |
-| Capricorn    | December 4       | December 29      |
-| Aquarius     | December 30      | January 24       |
-| Pisces       | January 25       | February 20      |
+| Zodiac Sign  | Start Date   | End Date     |
+|--------------|--------------|--------------|
+| Aries        | 16 April     | 11 May       |
+| Cetus        | 12 May       | 6 June       |
+| Taurus       | 7 June       | 2 July       |
+| Gemini       | 3 July       | 28 July      |
+| Cancer       | 29 July      | 23 August    |
+| Leo          | 24 August    | 18 September |
+| Virgo        | 19 September | 14 October   |
+| Libra        | 15 October   | 9 November   |
+| Scorpio      | 10 November  | 5 December   |
+| Ophiuchus    | 6 December   | 31 December  |
+| Sagittarius  | 1 January    | 26 January   |
+| Capricorn    | 27 January   | 21 February  |
+| Aquarius     | 22 February  | 20 March     |
+| Pisces       | 21 March     | 15 April     |
 
 ### Astronomical (IAU) System
 
 This system follows the actual star boundaries defined by the International Astronomical Union. Sign durations vary significantly.
 
-| Zodiac Sign  | Start Date       | End Date         |
-|--------------|------------------|------------------|
-| Aries        | April 18         | May 13           |
-| Taurus       | May 13           | June 21          |
-| Gemini       | June 21          | July 20          |
-| Cancer       | July 20          | August 10        |
-| Leo          | August 10        | September 16     |
-| Virgo        | September 16     | October 30       |
-| Libra        | October 30       | November 23      |
-| Scorpio      | November 23      | November 29      |
-| Sagittarius  | December 17      | January 20       |
-| Capricorn    | January 20       | February 16      |
-| Aquarius     | February 16      | March 11         |
-| Pisces       | March 11         | April 18         |
+| Zodiac Sign  | Start Date   | End Date     |
+|--------------|--------------|--------------|
+| Aries        | 19 April     | 13 May       |
+| Taurus       | 14 May       | 21 June      |
+| Gemini       | 22 June      | 20 July      |
+| Cancer       | 21 July      | 10 August    |
+| Leo          | 11 August    | 16 September |
+| Virgo        | 17 September | 30 October   |
+| Libra        | 31 October   | 23 November  |
+| Scorpio      | 24 November  | 29 November  |
+| Ophiuchus    | 30 November  | 17 December  |
+| Sagittarius  | 18 December  | 20 January   |
+| Capricorn    | 21 January   | 16 February  |
+| Aquarius     | 17 February  | 11 March     |
+| Pisces       | 12 March     | 18 April     |
 
 ## Validation
 
