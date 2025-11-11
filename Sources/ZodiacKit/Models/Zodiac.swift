@@ -6,6 +6,12 @@
 
 import Foundation
 
+/// The bundle associated with the current Swift Package module.
+///
+/// Use this property to access resources (such as assets, storyboards, or JSON files) included in
+/// the package target’s bundle.
+public let module: Bundle = .module
+
 /// A representation of a zodiac sign and its corresponding date range.
 public struct Zodiac: Codable {
 

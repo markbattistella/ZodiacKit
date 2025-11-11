@@ -7,14 +7,15 @@
 import XCTest
 @testable import ZodiacKit
 
-@MainActor
 final class ZodiacKitTests: XCTestCase {
 
     var service: ZodiacService!
 
-    override func setUp() {
-        super.setUp()
-        self.service = ZodiacService()
+    @MainActor
+    override func setUp() async throws {
+        await MainActor.run {
+            self.service = ZodiacService()
+        }
     }
 
     internal func assertZodiacAttribute<Z: ZodiacMetadataRepresentable, T: Equatable>(
@@ -34,7 +35,7 @@ final class ZodiacKitTests: XCTestCase {
     internal func assertZodiacError(
         _ error: Error,
         expected: ZodiacError,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) {
         switch (error, expected) {

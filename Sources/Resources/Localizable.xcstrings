@@ -1,0 +1,166 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "Could not construct a date for the given day (%lld) and month (%lld) using a leap year.": {
+      "comment": "Shown when date construction fails due to invalid leap year combination.",
+      "localizations": {
+        "de": { "stringUnit": { "state": "translated", "value": "Konnte kein Datum für den angegebenen Tag (%1$lld) und Monat (%2$lld) mit einem Schaltjahr erstellen." } },
+        "es": { "stringUnit": { "state": "translated", "value": "No se pudo construir una fecha para el día (%1$lld) y el mes (%2$lld) usando un año bisiesto." } },
+        "fr": { "stringUnit": { "state": "translated", "value": "Impossible de construire une date pour le jour (%1$lld) et le mois (%2$lld) en utilisant une année bissextile." } },
+        "it": { "stringUnit": { "state": "translated", "value": "Impossibile creare una data per il giorno (%1$lld) e il mese (%2$lld) utilizzando un anno bisestile." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "うるう年を使用して日 (%1$lld) と月 (%2$lld) の日付を作成できませんでした。" } },
+        "ko": { "stringUnit": { "state": "translated", "value": "윤년을 사용하여 날짜(%1$lld)와 월(%2$lld)에 대한 날짜를 생성할 수 없습니다." } },
+        "pt-BR": { "stringUnit": { "state": "translated", "value": "Não foi possível construir uma data para o dia (%1$lld) e o mês (%2$lld) usando um ano bissexto." } },
+        "ru": { "stringUnit": { "state": "translated", "value": "Не удалось создать дату для дня (%1$lld) и месяца (%2$lld), используя високосный год." } },
+        "uk": { "stringUnit": { "state": "translated", "value": "Не вдалося створити дату для дня (%1$lld) і місяця (%2$lld) із використанням високосного року." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "无法使用闰年来构建给定日期 (%1$lld) 和月份 (%2$lld) 的日期。" } },
+        "en": { "stringUnit": { "state": "new", "value": "Could not construct a date for the given day (%1$lld) and month (%2$lld) using a leap year." } }
+      }
+    },
+    "Duplicate zodiac signs found: %@. Each sign should only appear once.": {
+      "comment": "Shown when more than one zodiac entry is found for the same sign.",
+      "localizations": {
+        "de": { "stringUnit": { "state": "translated", "value": "Doppelte Sternzeichen gefunden: %@. Jedes Zeichen darf nur einmal erscheinen." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Se encontraron signos del zodíaco duplicados: %@. Cada signo debe aparecer solo una vez." } },
+        "fr": { "stringUnit": { "state": "translated", "value": "Signes du zodiaque en double trouvés : %@. Chaque signe ne doit apparaître qu’une seule fois." } },
+        "it": { "stringUnit": { "state": "translated", "value": "Trovati segni zodiacali duplicati: %@. Ogni segno deve apparire solo una volta." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "重複した星座が見つかりました: %@。各星座は一度だけ表示される必要があります。" } },
+        "ko": { "stringUnit": { "state": "translated", "value": "중복된 별자리가 발견되었습니다: %@. 각 별자리는 한 번만 나타나야 합니다." } },
+        "pt-BR": { "stringUnit": { "state": "translated", "value": "Foram encontrados signos do zodíaco duplicados: %@. Cada signo deve aparecer apenas uma vez." } },
+        "ru": { "stringUnit": { "state": "translated", "value": "Найдены дублирующиеся знаки зодиака: %@. Каждый знак должен появляться только один раз." } },
+        "uk": { "stringUnit": { "state": "translated", "value": "Знайдено дублікати знаків зодіаку: %@. Кожен знак повинен з’являтися лише один раз." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "发现重复的星座：%@。每个星座只能出现一次。" } },
+        "en": { "stringUnit": { "state": "new", "value": "Duplicate zodiac signs found: %@. Each sign should only appear once." } }
+      }
+    },
+    "Invalid date components were found in %@.": {
+      "comment": "Shown when the provided date object has missing or invalid components.",
+      "localizations": {
+        "de": { "stringUnit": { "state": "translated", "value": "Ungültige Datumskomponenten wurden in %@ gefunden." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Se encontraron componentes de fecha no válidos en %@." } },
+        "fr": { "stringUnit": { "state": "translated", "value": "Des composants de date non valides ont été trouvés dans %@." } },
+        "it": { "stringUnit": { "state": "translated", "value": "Sono stati trovati componenti di data non validi in %@." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "%@ に無効な日付コンポーネントが見つかりました。" } },
+        "ko": { "stringUnit": { "state": "translated", "value": "%@에서 잘못된 날짜 구성 요소가 발견되었습니다." } },
+        "pt-BR": { "stringUnit": { "state": "translated", "value": "Foram encontrados componentes de data inválidos em %@." } },
+        "ru": { "stringUnit": { "state": "translated", "value": "В %@ найдены недопустимые компоненты даты." } },
+        "uk": { "stringUnit": { "state": "translated", "value": "У %@ знайдено недійсні компоненти дати." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "在 %@ 中发现无效的日期组件。" } },
+        "en": { "stringUnit": { "state": "new", "value": "Invalid date components were found in %@." } }
+      }
+    },
+    "Missing zodiac definitions for: %@. All expected signs must be present.": {
+      "comment": "Shown when one or more expected zodiac signs are missing from configuration.",
+      "localizations": {
+        "de": { "stringUnit": { "state": "translated", "value": "Fehlende Sternzeichendefinitionen für: %@. Alle erwarteten Zeichen müssen vorhanden sein." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Faltan definiciones del zodíaco para: %@. Todos los signos esperados deben estar presentes." } },
+        "fr": { "stringUnit": { "state": "translated", "value": "Définitions du zodiaque manquantes pour : %@. Tous les signes attendus doivent être présents." } },
+        "it": { "stringUnit": { "state": "translated", "value": "Definizioni zodiacali mancanti per: %@. Tutti i segni previsti devono essere presenti." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "次の星座の定義が欠落しています: %@。すべての星座が存在する必要があります。" } },
+        "ko": { "stringUnit": { "state": "translated", "value": "%@에 대한 별자리 정의가 누락되었습니다. 모든 예상된 별자리가 포함되어야 합니다." } },
+        "pt-BR": { "stringUnit": { "state": "translated", "value": "Definições de signos do zodíaco ausentes para: %@. Todos os signos esperados devem estar presentes." } },
+        "ru": { "stringUnit": { "state": "translated", "value": "Отсутствуют определения знаков зодиака для: %@. Все ожидаемые знаки должны быть указаны." } },
+        "uk": { "stringUnit": { "state": "translated", "value": "Відсутні визначення знаків зодіаку для: %@. Усі очікувані знаки мають бути присутні." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "缺少以下星座定义：%@。必须包含所有预期的星座。" } },
+        "en": { "stringUnit": { "state": "new", "value": "Missing zodiac definitions for: %@. All expected signs must be present." } }
+      }
+    },
+    "Multiple zodiac signs overlap on the same day(s): %@. Each day should be uniquely assigned.": {
+      "comment": "Shown when two or more zodiac ranges overlap on the same calendar days.",
+      "localizations": {
+        "de": { "stringUnit": { "state": "translated", "value": "Mehrere Sternzeichen überlappen an den gleichen Tagen: %@. Jeder Tag sollte eindeutig zugewiesen sein." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Múltiples signos del zodíaco se superponen en los mismos días: %@. Cada día debe asignarse de forma única." } },
+        "fr": { "stringUnit": { "state": "translated", "value": "Plusieurs signes du zodiaque se chevauchent aux mêmes jours : %@. Chaque jour doit être attribué de façon unique." } },
+        "it": { "stringUnit": { "state": "translated", "value": "Più segni zodiacali si sovrappongono negli stessi giorni: %@. Ogni giorno deve essere assegnato in modo univoco." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "同じ日に複数の星座が重複しています: %@。各日は一意に割り当てられる必要があります。" } },
+        "ko": { "stringUnit": { "state": "translated", "value": "여러 별자리가 같은 날짜에 중복되어 있습니다: %@. 각 날짜는 고유하게 할당되어야 합니다." } },
+        "pt-BR": { "stringUnit": { "state": "translated", "value": "Vários signos do zodíaco se sobrepõem nos mesmos dias: %@. Cada dia deve ser atribuído exclusivamente." } },
+        "ru": { "stringUnit": { "state": "translated", "value": "Некоторые знаки зодиака пересекаются в одни и те же дни: %@. Каждый день должен быть назначен однозначно." } },
+        "uk": { "stringUnit": { "state": "translated", "value": "Декілька знаків зодіаку перекриваються в одні й ті ж дні: %@. Кожен день має бути призначений унікально." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "多个星座在同一天重叠：%@。每一天必须唯一分配。" } },
+        "en": { "stringUnit": { "state": "new", "value": "Multiple zodiac signs overlap on the same day(s): %@. Each day should be uniquely assigned." } }
+      }
+    },
+    "No zodiac sign was found for day number %lld.": {
+      "comment": "Shown when no zodiac mapping exists for the given day number.",
+      "localizations": {
+        "de": { "stringUnit": { "state": "translated", "value": "Kein Sternzeichen wurde für die Tagesnummer %1$lld gefunden." } },
+        "es": { "stringUnit": { "state": "translated", "value": "No se encontró ningún signo del zodíaco para el número de día %1$lld." } },
+        "fr": { "stringUnit": { "state": "translated", "value": "Aucun signe du zodiaque n’a été trouvé pour le numéro de jour %1$lld." } },
+        "it": { "stringUnit": { "state": "translated", "value": "Nessun segno zodiacale è stato trovato per il numero di giorno %1$lld." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "日数 %1$lld に対して星座が見つかりませんでした。" } },
+        "ko": { "stringUnit": { "state": "translated", "value": "일 번호 %1$lld에 해당하는 별자리를 찾을 수 없습니다." } },
+        "pt-BR": { "stringUnit": { "state": "translated", "value": "Nenhum signo do zodíaco foi encontrado para o número do dia %1$lld." } },
+        "ru": { "stringUnit": { "state": "translated", "value": "Не найден знак зодиака для номера дня %1$lld." } },
+        "uk": { "stringUnit": { "state": "translated", "value": "Не знайдено знак зодіаку для номера дня %1$lld." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "未找到日期编号为 %1$lld 的星座。" } },
+        "en": { "stringUnit": { "state": "new", "value": "No zodiac sign was found for day number %1$lld." } }
+      }
+    },
+    "Some days are not covered by any zodiac sign: %@.": {
+      "comment": "Shown when calendar days exist that are not assigned to any zodiac sign.",
+      "localizations": {
+        "de": { "stringUnit": { "state": "translated", "value": "Einige Tage sind keinem Sternzeichen zugeordnet: %@." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Algunos días no están cubiertos por ningún signo del zodíaco: %@." } },
+        "fr": { "stringUnit": { "state": "translated", "value": "Certains jours ne sont couverts par aucun signe du zodiaque : %@." } },
+        "it": { "stringUnit": { "state": "translated", "value": "Alcuni giorni non sono ricompresi in alcun segno zodiacale: %@." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "いくつかの日がどの星座にも含まれていません：%@。" } },
+        "ko": { "stringUnit": { "state": "translated", "value": "일부 날짜는 어떤 별자리에 할당되어 있지 않습니다: %@." } },
+        "pt-BR": { "stringUnit": { "state": "translated", "value": "Alguns dias não são cobertos por nenhum signo do zodíaco: %@." } },
+        "ru": { "stringUnit": { "state": "translated", "value": "Некоторые дни не покрыты ни одним знаком зодиака: %@." } },
+        "uk": { "stringUnit": { "state": "translated", "value": "Деякі дні не охоплені жодним знаком зодіаку: %@." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "某些日期未被任何星座涵盖：%@。" } },
+        "en": { "stringUnit": { "state": "new", "value": "Some days are not covered by any zodiac sign: %@." } }
+      }
+    },
+    "The zodiac data is invalid or corrupted.": {
+      "comment": "Shown when zodiac data cannot be parsed or is malformed.",
+      "localizations": {
+        "de": { "stringUnit": { "state": "translated", "value": "Die Sternzeichendaten sind ungültig oder beschädigt." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Los datos del zodíaco son inválidos o están corruptos." } },
+        "fr": { "stringUnit": { "state": "translated", "value": "Les données du zodiaque sont invalides ou corrompues." } },
+        "it": { "stringUnit": { "state": "translated", "value": "I dati dello zodiaco sono non validi o danneggiati." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "星座データが無効または破損しています。" } },
+        "ko": { "stringUnit": { "state": "translated", "value": "별자리 데이터가 유효하지 않거나 손상되었습니다." } },
+        "pt-BR": { "stringUnit": { "state": "translated", "value": "Os dados do zodíaco são inválidos ou corrompidos." } },
+        "ru": { "stringUnit": { "state": "translated", "value": "Данные зодиака недействительны или повреждены." } },
+        "uk": { "stringUnit": { "state": "translated", "value": "Дані зодіаку недійсні або пошкоджені." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "星座数据无效或已损坏。" } },
+        "en": { "stringUnit": { "state": "new", "value": "The zodiac data is invalid or corrupted." } }
+      }
+    },
+    "Unable to determine the day of the year for the adjusted date: %@.": {
+      "comment": "Shown when system cannot calculate the day of the year from an adjusted date.",
+      "localizations": {
+        "de": { "stringUnit": { "state": "translated", "value": "Kann den Tag des Jahres für das angepasste Datum nicht bestimmen: %@." } },
+        "es": { "stringUnit": { "state": "translated", "value": "No se puede determinar el día del año para la fecha ajustada: %@." } },
+        "fr": { "stringUnit": { "state": "translated", "value": "Impossible de déterminer le jour de l’année pour la date ajustée : %@." } },
+        "it": { "stringUnit": { "state": "translated", "value": "Impossibile determinare il giorno dell’anno per la data modificata: %@." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "調整された日付 %@ の年内通算日を決定できません。" } },
+        "ko": { "stringUnit": { "state": "translated", "value": "조정된 날짜 %@에 대해 연중 일을 결정할 수 없습니다." } },
+        "pt-BR": { "stringUnit": { "state": "translated", "value": "Não foi possível determinar o dia do ano para a data ajustada: %@." } },
+        "ru": { "stringUnit": { "state": "translated", "value": "Не удалось определить день года для скорректированной даты: %@." } },
+        "uk": { "stringUnit": { "state": "translated", "value": "Не вдалося визначити номер дня у році для скоригованої дати: %@." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "无法确定调整日期 %@ 的年度第几天。" } },
+        "en": { "stringUnit": { "state": "new", "value": "Unable to determine the day of the year for the adjusted date: %@." } }
+      }
+    },
+    "Zodiac date ranges are not continuous. Every day of the year must be covered without gaps.": {
+      "comment": "Shown when zodiac date ranges are not sequential or leave gaps.",
+      "localizations": {
+        "de": { "stringUnit": { "state": "translated", "value": "Die Sternzeichenzeiträume sind nicht durchgängig. Jeder Tag des Jahres muss ohne Lücken abgedeckt sein." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Los rangos de fechas del zodíaco no son continuos. Cada día del año debe estar cubierto sin huecos." } },
+        "fr": { "stringUnit": { "state": "translated", "value": "Les plages de dates du zodiaque ne sont pas continues. Chaque jour de l’année doit être couvert sans interruption." } },
+        "it": { "stringUnit": { "state": "translated", "value": "Gli intervalli di date zodiacali non sono continui. Ogni giorno dell’anno deve essere coperto senza lacune." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "星座の日付範囲が連続していません。年のすべての日が隙間なくカバーされる必要があります。" } },
+        "ko": { "stringUnit": { "state": "translated", "value": "별자리 날짜 범위가 연속적이지 않습니다. 연중 모든 날이 격차 없이 포함되어야 합니다." } },
+        "pt-BR": { "stringUnit": { "state": "translated", "value": "Os intervalos de datas do zodíaco não são contínuos. Cada dia do ano deve estar coberto sem lacunas." } },
+        "ru": { "stringUnit": { "state": "translated", "value": "Диапазоны дат зодиака не непрерывны. Каждый день года должен быть покрыт без разрывов." } },
+        "uk": { "stringUnit": { "state": "translated", "value": "Інтервали дат зодіаку не є безперервними. Кожен день року має бути охоплений без пропусків." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "星座日期范围不连续。每年的每一天都必须被覆盖且不能有空隙。" } },
+        "en": { "stringUnit": { "state": "new", "value": "Zodiac date ranges are not continuous. Every day of the year must be covered without gaps." } }
+      }
+    }
+  },
+  "version": "1.1"
+}

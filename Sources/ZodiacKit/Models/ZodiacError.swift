@@ -62,54 +62,74 @@ extension ZodiacError: LocalizedError {
 
     /// A user-facing description of the zodiac-related error.
     ///
-    /// Provides a readable explanation of the problem, typically for display in UI or debugging logs.
-    /// Where appropriate, this includes formatted representations of the related data.
+    /// Each case uses `String(localized:)` to support translation.
+    /// Use interpolated placeholders (`\(variable)`) for dynamic data.
     public var errorDescription: String? {
         switch self {
 
             case .invalidDateComponents(let date):
-                /// Indicates that the provided `Date` object has missing or invalid components.
-                return "Invalid date components were found in \(compactDate(date))."
+                return String(
+                    localized: "Invalid date components were found in \(compactDate(date)).",
+                    comment: "Shown when the provided date object has missing or invalid components."
+                )
 
             case .couldNotConstructLeapDate(let month, let day):
-                /// Indicates failure to build a valid `Date` using leap year logic.
-                return "Could not construct a date for the given day (\(day)) and month (\(month)) using a leap year."
+                return String(
+                    localized: "Could not construct a date for the given day (\(day)) and month (\(month)) using a leap year.",
+                    comment: "Shown when date construction fails due to invalid leap year combination."
+                )
 
             case .couldNotGetDayOfYear(let adjustedDate):
-                /// The system was unable to determine the ordinal day in the year for the given date.
-                return "Unable to determine the day of the year for the adjusted date: \(compactDate(adjustedDate))."
+                return String(
+                    localized: "Unable to determine the day of the year for the adjusted date: \(compactDate(adjustedDate)).",
+                    comment: "Shown when system cannot calculate the day of the year from an adjusted date."
+                )
 
             case .duplicateZodiacsFound(let duplicates):
-                /// More than one zodiac definition was found for the same sign.
                 let signs = duplicates.map(\.name).joined(separator: ", ")
-                return "Duplicate zodiac signs found: \(signs). Each sign should only appear once."
+                return String(
+                    localized: "Duplicate zodiac signs found: \(signs). Each sign should only appear once.",
+                    comment: "Shown when more than one zodiac entry is found for the same sign."
+                )
 
             case .missingZodiacs(let missing):
-                /// One or more expected zodiac signs were not included in the configuration.
                 let signs = missing.map(\.name).joined(separator: ", ")
-                return "Missing zodiac definitions for: \(signs). All expected signs must be present."
+                return String(
+                    localized: "Missing zodiac definitions for: \(signs). All expected signs must be present.",
+                    comment: "Shown when one or more expected zodiac signs are missing from configuration."
+                )
 
             case .missingDays(let missingDays):
-                /// There are calendar days not covered by any zodiac sign.
                 let formatted = missingDays.map { compactDate($0) }.joined(separator: ", ")
-                return "Some days are not covered by any zodiac sign: \(formatted)."
+                return String(
+                    localized: "Some days are not covered by any zodiac sign: \(formatted).",
+                    comment: "Shown when calendar days exist that are not assigned to any zodiac sign."
+                )
 
             case .overlappingDays(let days):
-                /// Two or more zodiac signs overlap on the same calendar days.
                 let list = days.map(String.init).joined(separator: ", ")
-                return "Multiple zodiac signs overlap on the same day(s): \(list). Each day should be uniquely assigned."
+                return String(
+                    localized: "Multiple zodiac signs overlap on the same day(s): \(list). Each day should be uniquely assigned.",
+                    comment: "Shown when two or more zodiac ranges overlap on the same calendar days."
+                )
 
             case .nonContinuousRanges:
-                /// The defined zodiac ranges are not continuous across the full year.
-                return "Zodiac date ranges are not continuous. Every day of the year must be covered without gaps."
+                return String(
+                    localized: "Zodiac date ranges are not continuous. Every day of the year must be covered without gaps.",
+                    comment: "Shown when zodiac date ranges are not sequential or leave gaps."
+                )
 
             case .invalidData:
-                /// The zodiac data could not be parsed or was otherwise malformed.
-                return "The zodiac data is invalid or corrupted."
+                return String(
+                    localized: "The zodiac data is invalid or corrupted.",
+                    comment: "Shown when zodiac data cannot be parsed or is malformed."
+                )
 
             case .dayNumberNotFound(let dayNumber):
-                /// No zodiac sign could be found for the specified day of the year.
-                return "No zodiac sign was found for day number \(dayNumber)."
+                return String(
+                    localized: "No zodiac sign was found for day number \(dayNumber).",
+                    comment: "Shown when no zodiac mapping exists for the given day number."
+                )
         }
     }
 }

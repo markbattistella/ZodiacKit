@@ -9,6 +9,7 @@ import XCTest
 
 // MARK: - System Start/End/Middle Date Tests
 
+@MainActor
 extension ZodiacKitTests {
 
     func testStartDatesReturnCorrectSignForAllSystems() throws {

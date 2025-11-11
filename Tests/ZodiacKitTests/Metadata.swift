@@ -9,6 +9,7 @@ import XCTest
 
 // MARK: - Metadata
 
+@MainActor
 extension ZodiacKitTests {
     
     /// Validates the completeness of Western zodiac metadata across all supported systems.
