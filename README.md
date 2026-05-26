@@ -32,13 +32,23 @@ Add `ZodiacKit` to your Swift project using Swift Package Manager.
 
 ```swift
 dependencies: [
-  .package(url: "https://github.com/markbattistella/ZodiacKit", from: "x.y.z")
+  .package(url: "https://github.com/markbattistella/ZodiacKit", from: "26.2.21")
 ]
 ```
 
 > [!CAUTION]
 > `v1.x` to `v2.x` has some breaking changes.
 > `v2.x` to `v3.x` has some breaking changes.
+
+## Requirements
+
+- Swift 6.0 or later
+- iOS 15.0 or later
+- macOS 12.0 or later
+- Mac Catalyst 15.0 or later
+- tvOS 15.0 or later
+- watchOS 8.0 or later
+- visionOS 1.0 or later
 
 ## Usage
 
@@ -53,12 +63,12 @@ import ZodiacKit
 The default usage of the ZodiacKit package is quite straightforward. Here's an example:
 
 ```swift
-let zodiacService = try ZodiacService()
+let zodiacService = ZodiacService()
 let dateComponents = DateComponents(year: 1991, month: 5, day: 29)
-let birthDate = Calendar.current.date(from: dateComponents)
+let birthDate = Calendar.current.date(from: dateComponents)!
 
-let westernZodiacSign = try? zodiacService.getWesternZodiac(from: birthDate!)
-let chineseZodiacSign = try? zodiacService.getChineseZodiac(from: birthDate!)
+let westernZodiacSign = try zodiacService.getWesternZodiac(from: birthDate)
+let chineseZodiacSign = try zodiacService.getChineseZodiac(from: birthDate)
 
 // westernZodiacSign.name: Gemini 
 // chineseZodiacSign.name: Goat
@@ -76,13 +86,13 @@ If you want to use custom zodiac date ranges instead of the defaults (for the `W
 let customZodiacs: [Zodiac] = [
   Zodiac(
     sign: .aquarius,
-    startDate: .init(day: 22, month: 1),
-    endDate: .init(day: 19, month: 2)
+    start: .init(day: 22, month: 1),
+    end: .init(day: 19, month: 2)
   ),
   // ...
 ]
 
-let zodiacService = try? ZodiacService(system: .custom(customZodiacs))
+let zodiacService = ZodiacService(system: .custom(customZodiacs))
 ```
 
 ### In-app usage
@@ -100,12 +110,12 @@ class ViewController: UIViewController {
         super.viewDidLoad()
 
         do {
-            let zodiacService = try ZodiacService()
+            let zodiacService = ZodiacService()
             let dateComponents = DateComponents(year: 1991, month: 5, day: 29)
-            let birthDate = Calendar.current.date(from: dateComponents)
+            let birthDate = Calendar.current.date(from: dateComponents)!
 
-            let westernZodiacSign = try zodiacService.getWesternZodiac(from: birthDate!)
-            let chineseZodiacSign = try zodiacService.getChineseZodiac(from: birthDate!)
+            let westernZodiacSign = try zodiacService.getWesternZodiac(from: birthDate)
+            let chineseZodiacSign = try zodiacService.getChineseZodiac(from: birthDate)
 
             // Use signs...
             print(westernZodiacSign.name) // Gemini
@@ -128,14 +138,14 @@ import ZodiacKit
 struct ContentView: View {
   @StateObject private var zodiacService = ZodiacService()
 
-  @State private var westernZodiacSign: WesternZodiacSign?
-  @State private var chineseZodiacSign: ChineseZodiacSign?
+  @State private var westernZodiacSign: Western?
+  @State private var chineseZodiacSign: Chinese?
 
   var body: some View {
     VStack {
       if let westernSign = westernZodiacSign, let chineseSign = chineseZodiacSign {
         Text("Your zodiac sign is \(westernSign.name)")
-        Text("Your Chinese Zodiac sign is: \(chineseSign.name)")
+        Text("Your Chinese zodiac sign is \(chineseSign.name)")
       } else {
         Text("Failed to get zodiac sign")
       }
@@ -143,9 +153,9 @@ struct ContentView: View {
     .task {
       do {
         let dateComponents = DateComponents(year: 1991, month: 5, day: 29)
-        let birthDate = Calendar.current.date(from: dateComponents)
-        westernZodiacSign = try zodiacService.getWesternZodiac(from: birthDate!)
-        chineseZodiacSign = try zodiacService.getChineseZodiac(from: birthDate!)
+        let birthDate = Calendar.current.date(from: dateComponents)!
+        westernZodiacSign = try zodiacService.getWesternZodiac(from: birthDate)
+        chineseZodiacSign = try zodiacService.getChineseZodiac(from: birthDate)
       } catch {
         print("Failed to get zodiac sign: \(error)")
       }
@@ -167,12 +177,12 @@ class ViewController: NSViewController {
         super.viewDidLoad()
 
         do {
-            let zodiacService = try ZodiacService()
+            let zodiacService = ZodiacService()
             let dateComponents = DateComponents(year: 1991, month: 5, day: 29)
-            let birthDate = Calendar.current.date(from: dateComponents)
+            let birthDate = Calendar.current.date(from: dateComponents)!
 
-            let westernZodiacSign = try zodiacService.getWesternZodiac(from: birthDate!)
-            let chineseZodiacSign = try zodiacService.getChineseZodiac(from: birthDate!)
+            let westernZodiacSign = try zodiacService.getWesternZodiac(from: birthDate)
+            let chineseZodiacSign = try zodiacService.getChineseZodiac(from: birthDate)
 
             // Use signs...
             print(westernZodiacSign.name) // Gemini
@@ -279,7 +289,7 @@ During the initialisation of `ZodiacService`, the package performs several check
 
 ## Error Handling
 
-`ZodiacKit` performs several validations to ensure data consistency and accuracy. If an issue is found during initialisation or zodiac lookup, it throws a `ZodiacError`.
+`ZodiacKit` performs several validations to ensure data consistency and accuracy. If an issue is found during service initialisation, the service stores it in `validationError` and exposes `isValid == false`. Lookup methods throw `ZodiacError` when a date cannot be resolved.
 
 Below are the possible errors:
 
@@ -371,7 +381,7 @@ struct ZodiacDemo: View {
 
 ## Attributes
 
-### `WesternZodiacSign`
+### `Western`
 
 | Attribute | Description | Example / Values |
 |-----------|-------------|------------------|
@@ -402,7 +412,7 @@ struct ZodiacDemo: View {
 | `conflictingMatches` | Possible tension with these signs. | `[.taurus, .scorpio]` |
 | `harmfulMatches` | Signs with strong incompatibility. | `[.capricorn, .virgo]` |
 
-### `ChineseZodiacSign`
+### `Chinese`
 
 | Attribute | Description | Example / Values |
 |-----------|-------------|------------------|
